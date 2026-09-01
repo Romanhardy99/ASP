@@ -1,0 +1,38 @@
+﻿@page "/Fibonacci"
+
+@rendermode InteractiveServer
+
+@using System.Numerics
+
+<PageTitle>Fibonacci</PageTitle>
+
+<h1>Числа Фибоначчи</h1>
+
+<div class="fib-form">
+	<label>
+		Сколько чисел вывести
+		<input type="number" min="1" max="@MaxCount"
+			@bind="count" @bind:event="oninput" @bind:after="Calculate"/>
+	</label>
+</div>
+
+@if(error is not null)
+{
+	<p class="fib-error">@error</p>
+}
+else
+{
+	<div class="fib-list">
+		@for (int i =0; i < numbers.Count; i++)
+		{
+			<div class="fib-item">
+				<span class="fib-index">F@(i)</span>
+				<span class="fib-value">@numbers[i]</span>
+			</div>
+		}
+	</div>
+	<p class="fib-total">Сумма всех выведенных чисел: <b>@Total</b></p>
+}
+
+
+

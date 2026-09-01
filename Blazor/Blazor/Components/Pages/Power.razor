@@ -1,0 +1,28 @@
+﻿@page "/Power"
+@rendermode InteractiveServer
+
+<PageTitle>Power</PageTitle>
+
+<h1>Возведение в степень</h1>
+
+<div class="power-form">
+	<label>
+		Основание
+		<input type="number" step="any" @bind="baseValue"/>
+	</label>
+
+	<label>
+		Степень
+		<input type="number" @bind="exponent" @bind:event="oninput" @bind:after="Calculate" />
+	</label>
+</div>
+
+@if (error is not null)
+{
+	<p class="power-error">@error</p>
+}
+else if (result is not null)
+{
+	<p class="power-result">@baseValue ^ @exponent = @result</p>
+}
+

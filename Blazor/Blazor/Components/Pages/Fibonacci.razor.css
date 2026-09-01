@@ -1,0 +1,66 @@
+/* CSS for Fibonacci component */
+.fib-form{
+    display:flex;
+    align-items:flex-end;
+    gap:1rem;
+    margin-bottom:1.5rem;
+}
+
+.fib-form label {
+    display:flex;
+    flex-direction:column;
+    gap:0.25rem;
+    font-weight:600;
+}
+
+.fib-form input{
+    padding: 0.4rem;
+    width:8rem;
+    border: 1px solid #ccc;
+    border-radius:4px;
+}
+
+.fib-form button{
+    padding:0.45rem 1rem;
+    border:none;
+    border-radius:4px;
+    background: #6b46c1;
+    color:#fff;
+    cursor:pointer;
+}
+
+.fib-list{
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.5rem;
+}
+
+.fib-item{
+    display:flex;
+    flex-direction:column;
+    min-width:4rem;
+    padding:0.4rem 0.6rem;
+    border: 1px solid #e2e2e2;
+    border-radius: 6px;
+    background: #fafafa;
+}
+
+.fib-index{
+    font-size:0.7rem;
+    color:#888;
+}
+
+.fib-value{
+    font-variant-numeric:tabular-nums;
+    font-weight:600;
+    word-break: break-all;
+}
+
+.fib-total {
+    margin-top: 1.25rem;
+    word-break: break-all;
+}
+
+.fib-error{
+    color:#c53030;
+}
