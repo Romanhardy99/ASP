@@ -1,0 +1,37 @@
+﻿@page "/Dec2Hex"
+@rendermode InteractiveServer
+
+<PageTitle>Dec2Hex</PageTitle>
+
+<h3>Перевод из десятичного числа в шестнадцатеричную систему счисления</h3>
+
+<div> 
+    <label>Десятичное число:</label> 
+    <input type="number" @bind="decimalNumber" /> 
+    <button @onclick="Convert">Перевести</button> 
+</div> 
+@if (result != null) 
+{
+    <p>Результат: @result</p> 
+}
+@code 
+{
+    private int decimalNumber; 
+    private string? result; 
+    private void Convert() 
+    { 
+        int number = decimalNumber;
+        string hex = ""; 
+        if (number == 0) 
+        { 
+            result = "0"; return; 
+        } 
+        char[] digits = "0123456789ABCDEF".ToCharArray(); 
+        while (number > 0) 
+        {
+            int remainder = number % 16;
+            hex = digits[remainder] + hex; number /= 16; 
+        } 
+        result = hex; 
+    } 
+}

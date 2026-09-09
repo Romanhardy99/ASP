@@ -1,0 +1,48 @@
+﻿@page "/Hex2Dec"
+@rendermode InteractiveServer
+
+<PageTitle>Hex2Dec</PageTitle>
+
+<h3>
+    Перевод из шестнадцатеричного числа в десятичную систему счисления
+</h3>
+
+<div>
+    <label>Шестнадцатеричное число:</label>
+    <input type="text" @bind="hexNumber" />
+
+    <button @onclick="Convert">Перевести</button>
+</div>
+
+@if (result != null)
+{
+    <p>Результат: @result</p>
+}
+
+@code {
+    private string hexNumber = "";
+    private int? result;
+
+    private void Convert()
+    {
+        int decimalNumber = 0;
+
+        foreach (char digit in hexNumber.ToUpper())
+        {
+            int value;
+
+            if (digit >= '0' && digit <= '9')
+            {
+                value = digit - '0';
+            }
+            else
+            {
+                value = digit - 'A' + 10;
+            }
+
+            decimalNumber = decimalNumber * 16 + value;
+        }
+
+        result = decimalNumber;
+    }
+}

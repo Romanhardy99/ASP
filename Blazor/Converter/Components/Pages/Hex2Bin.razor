@@ -1,0 +1,61 @@
+﻿@page "/Hex2Bin"
+@rendermode InteractiveServer
+
+<PageTitle>Hex2Bin</PageTitle>
+
+<h3>
+    Перевод из шестнадцатеричного числа в двоичную систему счисления
+</h3>
+
+<div>
+    <label>Шестнадцатеричное число:</label>
+    <input type="text" @bind="hexNumber" />
+
+    <button @onclick="Convert">Перевести</button>
+</div>
+
+@if (result != null)
+{
+    <p>Результат: @result</p>
+}
+
+@code {
+    private string hexNumber = "";
+    private string? result;
+
+    private void Convert()
+    {
+        string binary = "";
+
+        foreach (char digit in hexNumber.ToUpper())
+        {
+            switch (digit)
+            {
+                case '0': binary += "0000"; break;
+                case '1': binary += "0001"; break;
+                case '2': binary += "0010"; break;
+                case '3': binary += "0011"; break;
+                case '4': binary += "0100"; break;
+                case '5': binary += "0101"; break;
+                case '6': binary += "0110"; break;
+                case '7': binary += "0111"; break;
+                case '8': binary += "1000"; break;
+                case '9': binary += "1001"; break;
+                case 'A': binary += "1010"; break;
+                case 'B': binary += "1011"; break;
+                case 'C': binary += "1100"; break;
+                case 'D': binary += "1101"; break;
+                case 'E': binary += "1110"; break;
+                case 'F': binary += "1111"; break;
+            }
+        }
+
+        result = binary.TrimStart('0');
+
+        if (result == "")
+        {
+            result = "0";
+        }
+    }
+}
+

@@ -1,0 +1,45 @@
+﻿@page "/Dec2Bin"
+@rendermode InteractiveServer
+
+<PageTitle>Dec2Bin</PageTitle>
+
+<h3>
+    Перевод из десятичного числа в двоичную систему счисления
+</h3>
+
+<div>
+    <label>Десятичное число:</label>
+    <input type="number" @bind="decimalNumber" />
+
+    <button @onclick="Convert">Перевести</button>
+</div>
+
+@if (result != null)
+{
+    <p>Результат: @result</p>
+}
+
+@code {
+    private int decimalNumber;
+    private string? result;
+
+    private void Convert()
+    {
+        int number = decimalNumber;
+        string binary = "";
+
+        if (number == 0)
+        {
+            result = "0";
+            return;
+        }
+
+        while (number > 0)
+        {
+            binary = (number % 2) + binary;
+            number /= 2;
+        }
+
+        result = binary;
+    }
+}

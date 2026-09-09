@@ -1,0 +1,53 @@
+﻿@page "/Bin2Hex"
+@rendermode InteractiveServer
+
+<PageTitle>Bin2Hex</PageTitle>
+
+<h3>
+    Перевод из двоичного числа в шестнадцатеричную систему счисления
+</h3>
+
+<div>
+    <label>Двоичное число:</label>
+    <input type="text" @bind="binaryNumber" />
+
+    <button @onclick="Convert">Перевести</button>
+</div>
+
+@if (result != null)
+{
+    <p>Результат: @result</p>
+}
+
+@code {
+    private string binaryNumber = "";
+    private string? result;
+
+    private void Convert()
+    {
+        int decimalNumber = 0;
+
+        foreach (char digit in binaryNumber)
+        {
+            decimalNumber = decimalNumber * 2 + (digit - '0');
+        }
+
+        if (decimalNumber == 0)
+        {
+            result = "0";
+            return;
+        }
+
+        string hex = "";
+        char[] digits = "0123456789ABCDEF".ToCharArray();
+
+        while (decimalNumber > 0)
+        {
+            int remainder = decimalNumber % 16;
+            hex = digits[remainder] + hex;
+            decimalNumber /= 16;
+        }
+
+        result = hex;
+    }
+}

@@ -1,0 +1,32 @@
+﻿@page "/Bin2Dec"
+@rendermode InteractiveServer
+
+<PageTitle>Bin2Dec</PageTitle>
+
+<h3>
+    Перевод из двоичного числа в десятичную  систему счисления
+</h3>
+
+<div> 
+    <label>Двоичное число:</label> 
+    <input type="text" @bind="binaryNumber" />
+    <button @onclick="Convert">Перевести</button> 
+</div>
+@if (result != null)
+{
+    <p>Результат: @result</p>
+}
+@code {
+    private string binaryNumber = "";
+    private int? result; 
+    private void Convert() { 
+        int decimalNumber = 0; 
+        foreach (char digit in binaryNumber) 
+        {
+            decimalNumber = decimalNumber * 2 + (digit - '0');
+        } 
+        result = decimalNumber; 
+    }
+}
+
+
