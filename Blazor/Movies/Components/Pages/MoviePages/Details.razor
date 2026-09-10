@@ -6,10 +6,10 @@
 
 <PageTitle>Details</PageTitle>
 
-<h1>Details</h1>
+@* <h1>Details</h1> *@
 
 <div>
-    <h2>Movie</h2>
+    @* <h2>Movie</h2> *@
     <hr />
     @if (movie is null)
     {
@@ -17,8 +17,10 @@
     }
     else {
         <dl class="row">
-            <dt class="col-sm-2">Title</dt>
-            <dd class="col-sm-10">@movie.Title</dd>
+            <h1>@movie.Title details</h1>
+            @* <hr/> *@
+            @* <dt class="col-sm-2">Title</dt>
+            <dd class="col-sm-10">@movie.Title</dd> *@
             <dt class="col-sm-2">ReleaseDate</dt>
             <dd class="col-sm-10">@movie.ReleaseDate</dd>
             <dt class="col-sm-2">Genre</dt>
@@ -30,6 +32,7 @@
         </dl>
         <div>
             <a href="@($"/movies/edit?id={movie.Id}")">Edit</a> |
+            <a href="@($"/movies/delete?id={movie.Id}")">Delete</a> |
             <a href="@($"/movies")">Back to List</a>
         </div>
     }
