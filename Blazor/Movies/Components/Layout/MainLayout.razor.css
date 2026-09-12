@@ -6,16 +6,32 @@
 
 main {
     flex: 1;
+    background: transparent;
 }
 
 .sidebar {
-    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+    background: linear-gradient(180deg, rgba(38, 49, 74, 0.75) 0%, rgba(19, 26, 41, 0.75) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 2px 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.nav-item ::deep a.active {
+    background-color: #ff8c1a;
+    color: #1a1305;
+}
+
+.nav-item ::deep .nav-link:hover {
+    background-color: rgba(255, 140, 26, 0.25);
+    color: white;
 }
 
 .top-row {
-    background-color: #f7f7f7;
-    border-bottom: 1px solid #d6d5d5;
-    justify-content: flex-end;
+    background-color: rgba(26, 34, 51, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    justify-content: space-between;
     height: 3.5rem;
     display: flex;
     align-items: center;
@@ -25,11 +41,14 @@ main {
         white-space: nowrap;
         margin-left: 1.5rem;
         text-decoration: none;
+        color: #ff8c1a;
+        transition: color 0.2s ease;
     }
 
-    .top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
-        text-decoration: underline;
-    }
+        .top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
+            color: #ffb066;
+            text-decoration: underline;
+        }
 
     .top-row ::deep a:first-child {
         overflow: hidden;
