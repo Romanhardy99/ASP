@@ -6,15 +6,26 @@
 
 main {
     flex: 1;
+    background: transparent;
 }
 
 .sidebar {
-    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+    background-image: linear-gradient(180deg, #26314a 0%, #131a29 100%);
+}
+.nav-item ::deep a.active {
+    background-color: #ff8c1a;
+    color: #1a1305;
 }
 
+.nav-item ::deep .nav-link:hover {
+    background-color: rgba(255, 140, 26, 0.25);
+    color: white;
+}
+
+
 .top-row {
-    background-color: #f7f7f7;
-    border-bottom: 1px solid #d6d5d5;
+    background-color: #1a2233;
+    border-bottom: 1px solid #2e3a52;
     justify-content: flex-end;
     height: 3.5rem;
     display: flex;
@@ -22,14 +33,16 @@ main {
 }
 
     .top-row ::deep a, .top-row ::deep .btn-link {
+        color: #ff8c1a;
         white-space: nowrap;
         margin-left: 1.5rem;
         text-decoration: none;
     }
 
-    .top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
-        text-decoration: underline;
-    }
+        .top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
+            color: #ffb066;
+            text-decoration: underline;
+        }
 
     .top-row ::deep a:first-child {
         overflow: hidden;

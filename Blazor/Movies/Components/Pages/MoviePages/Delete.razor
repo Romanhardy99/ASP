@@ -9,15 +9,16 @@
 @* <h1>Delete</h1> *@
 
 @* <p>Are you sure you want to delete this?</p> *@
-<div>
-    @* <h2>Movie</h2> *@
-   @*  <hr /> *@
-    @if (movie is null)
-    {
+<div class="movie-page">
+    <div>
+        @* <h2>Movie</h2> *@
+        @*  <hr /> *@
+        @if (movie is null)
+        {
         <p><em>Loading...</em></p>
-    }
-    else {
-        <div class="movie-container"> 
+        }
+        else {
+        <div class="movie-container">
             <div>
                 <h1>Вы действительно хотите удалить "@movie.Title"</h1>
                 <hr />
@@ -47,7 +48,8 @@
                 <img src="@movie.Poster" alt="@movie.Title poster" />
             </div>
         </div>
-    }
+        }
+    </div>
 </div>
  
 @code {

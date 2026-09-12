@@ -9,21 +9,23 @@
 @* <h1>Edit</h1> *@
 
 @* <h2>Movie</h2> *@
-<hr />
-@if (Movie is null)
-{
+<div class="movie-page">
+    <hr />
+    @if (Movie is null)
+    {
     <p><em>Loading...</em></p>
-}
-else
-{
-    @* <h1>@Movie,Title edit</h1> *@
+    }
+    else
+    {
     <div class="movie-container">
+
         <div class="col-md-4">
+            <h1>Окно редактирования "@Movie.Title"</h1>
             <EditForm method="post" Model="Movie" OnValidSubmit="UpdateMovie" FormName="edit" Enhance>
                 <DataAnnotationsValidator />
-                <ValidationSummary role="alert"/>
+                <ValidationSummary role="alert" />
                 <input type="hidden" name="Movie.Id" value="@Movie.Id" />
-                
+
                 <div class="mb-3">
                     <label for="title" class="form-label">Title:</label>
                     <InputText id="title" @bind-Value="Movie.Title" class="form-control" />
@@ -63,10 +65,11 @@ else
         </div>
 
     </div>
-}
+    }
 
-<div>
-    <a href="/movies">Back to List</a>
+    <div>
+        <a href="/movies">Back to List</a>
+    </div>
 </div>
 
 @code {

@@ -8,18 +8,19 @@
 
 @* <h1>Details</h1> *@
 
-<div>
-    @* <h2>Movie</h2> *@
-    <hr />
-    @if (movie is null)
-    {
+<div class="movie-page">
+    <div>
+        @* <h2>Movie</h2> *@
+        <hr />
+        @if (movie is null)
+        {
         <p><em>Loading...</em></p>
-    }
-    else {
+        }
+        else {
         <div class="container">
             <dl class="row">
                 <h1>@movie.Title details</h1>
-                <hr/>
+                <hr />
                 @* <dt class="col-sm-2">Title</dt>
                 <dd class="col-sm-10">@movie.Title</dd> *@
                 <dt class="col-sm-2">ReleaseDate</dt>
@@ -41,7 +42,8 @@
                 <img src="@movie.Poster" alt="@movie.Title poster" />
             </div>
         </div>
-    }
+        }
+    </div>
 </div>
 
 @code {

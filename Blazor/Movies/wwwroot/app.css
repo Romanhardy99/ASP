@@ -58,3 +58,49 @@ h1:focus {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
 }
+
+.movie-page {
+    min-height: 100vh;
+    padding: 30px;
+    background-image: url('/movie-background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: -1.1rem -1.5rem 0 -1.5rem;
+}
+    .movie-page .table {
+        --bs-table-color: white;
+        --bs-table-bg: transparent;
+        background-color: transparent;
+        color: white;
+        font-weight: 600;
+    }
+
+        .movie-page .table th,
+        .movie-page .table td {
+            --bs-table-color: white;
+            background-color: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .movie-page .table th {
+            background-color: rgba(0, 0, 0, 0.45);
+        }
+
+        .movie-page .table td {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        .movie-page .table a {
+            color: white;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+            .movie-page .table a:hover {
+                text-decoration: underline;
+            }
+@media (min-width: 641px) {
+    .movie-page {
+        margin: -1.1rem -1.5rem 0 -2rem;
+    }
+}
