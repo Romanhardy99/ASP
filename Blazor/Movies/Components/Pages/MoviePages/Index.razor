@@ -15,6 +15,23 @@
         <a href="movies/create">Create New</a>
     </SectionContent>
 
+    <div class="movie-filters mb-3">
+        <div style="max-width: 300px;">
+            <label for="search" class="form-label">Поиск по названию:</label>
+            <input type="text" id="search" class="form-control"
+                   placeholder="Введите название фильма..."
+                   @bind="searchText" @bind:event="oninput" />
+        </div>
+
+        <div style="max-width: 200px;">
+            <label for="pageSize" class="form-label">Фильмов на странице:</label>
+            <input type="number" id="pageSize" class="form-control"
+                   value="@pagination.ItemsPerPage"
+                   min="1" max="100"
+                   @onchange="OnPageSizeChanged" />
+        </div>
+    </div>
+
     <QuickGrid Class="table" Items="context.Movie" Pagination="pagination">
         <TemplateColumn Title="Название" Context="movie" Sortable="true" SortBy="titleSort">
             <a href="@($"movies/details?id={movie.Id}")">@movie.Title</a>
@@ -33,10 +50,28 @@
     private MoviesContext context = default!;
 
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
+
     private GridSort<Movie> titleSort = GridSort<Movie>.ByAscending(m => m.Title);
+
+    private string? searchText;
+
+    private IQueryable<Movie> FilteredMovies =>
+     string.IsNullOrWhiteSpace(searchText)
+         ? context.Movie
+         : context.Movie.Where(m => m.Title.Contains(searchText));
+
     protected override void OnInitialized()
     {
         context = DbFactory.CreateDbContext();
+    }
+
+    private async Task OnPageSizeChanged(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out var value) && value > 0)
+        {
+            pagination.ItemsPerPage = value;
+            await pagination.SetCurrentPageIndexAsync(0);
+        }
     }
 
     public async ValueTask DisposeAsync() => await context.DisposeAsync();

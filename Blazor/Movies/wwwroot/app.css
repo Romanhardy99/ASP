@@ -168,3 +168,39 @@ h1:focus {
         transform: scale(1.05);
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     }
+
+.movie-page label.form-label {
+    color: white;
+    font-weight: 600;
+}
+
+.movie-page select.form-select,
+.movie-page input.form-control {
+    background-color: rgba(0, 0, 0, 0.35);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+    .movie-page select.form-select:focus,
+    .movie-page input.form-control:focus {
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        border-color: #ff8c1a;
+        box-shadow: 0 0 0 0.2rem rgba(255, 140, 26, 0.35);
+    }
+
+    .movie-page select.form-select option {
+        background-color: #1a2233;
+        color: white;
+    }
+
+.movie-filters {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+
+.movie-page input.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
