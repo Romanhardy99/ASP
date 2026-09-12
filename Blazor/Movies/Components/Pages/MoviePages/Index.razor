@@ -8,18 +8,18 @@
 
 <PageTitle>Index</PageTitle>
 <div class="movie-page">
-    <h1>Index</h1>
+    <h1>КИНОЛЕНТА</h1>
 
     <SectionContent SectionName="page-actions">
         <a href="movies/create">Create New</a>
     </SectionContent>
 
     <QuickGrid Class="table" Items="context.Movie">
-        <TemplateColumn Context="movie">
+        <TemplateColumn Title="Название" Context="movie">
             <a href="@($"movies/details?id={movie.Id}")">@movie.Title</a>
         </TemplateColumn>
-        <PropertyColumn Property="movie => movie.ReleaseDate" />
-        <PropertyColumn Property="movie => movie.Genre" />
+        <PropertyColumn Property="movie => movie.ReleaseDate" Title="Дата выхода"/>
+        <PropertyColumn Property="movie => movie.Genre" Title="Жанр" />
 
         @* <TemplateColumn Context="movie">
             <a href="@($"movies/details?id={movie.Id}")">Details</a> |

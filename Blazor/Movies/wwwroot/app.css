@@ -106,6 +106,16 @@ h1:focus {
             background-color: rgba(0, 0, 0, 0.45);
         }
 
+            .movie-page .table th .col-header-content,
+            .movie-page .table th .col-title {
+                justify-content: center;
+            }
+
+            .movie-page .table th,
+            .movie-page .table th * {
+                color: white !important;
+            }
+
         .movie-page .table td {
             background-color: rgba(0, 0, 0, 0.2);
         }
