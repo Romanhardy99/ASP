@@ -144,6 +144,14 @@ h1:focus {
                 text-decoration: underline;
             }
 
+        .movie-page .table tr:has(> td:not(:empty)) > td {
+            display: table-cell;
+        }
+
+        .movie-page .table td:empty {
+            display: none;
+        }
+
 @media (min-width: 641px) {
     .movie-page {
         margin: -1.1rem -1.5rem 0 -2rem;
