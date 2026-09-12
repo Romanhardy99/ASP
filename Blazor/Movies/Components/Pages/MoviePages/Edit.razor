@@ -113,7 +113,7 @@
             }
         }
 
-        NavigationManager.NavigateTo("/movies");
+        NavigationManager.NavigateTo($"/movies/details?id={Movie.Id}");
     }
 
     private bool MovieExists(int id)
