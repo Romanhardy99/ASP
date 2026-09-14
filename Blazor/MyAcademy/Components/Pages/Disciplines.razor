@@ -1,0 +1,34 @@
+﻿@page "/disciplines"
+@rendermode InteractiveServer
+
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using Microsoft.EntityFrameworkCore
+@using MyAcademy.Data;
+@using MyAcademy.Models
+
+@inject IDbContextFactory<PV522ImportContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Disciplines</PageTitle>
+
+<h3>Дисциплины</h3>
+
+@code {
+
+}
+
+
+<QuickGrid Class="table academy-table" Items="context.Disciplines">
+    <PropertyColumn Property="discipline => discipline.DisciplineId" Title="ID" />
+    <PropertyColumn Property="discipline => discipline.DisciplineName" Title="Название дисциплины" />
+    <PropertyColumn Property="discipline => discipline.NumberOfLessons" Title="Количество занятий" />
+</QuickGrid>
+
+@code {
+    private PV522ImportContext context = default!;
+
+    protected override void OnInitialized()
+    {
+        context = DbFactory.CreateDbContext();
+    }
+}

@@ -1,0 +1,30 @@
+﻿@page "/grades"
+@rendermode InteractiveServer
+
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using Microsoft.EntityFrameworkCore
+@using MyAcademy.Data;
+@using MyAcademy.Models
+
+@inject IDbContextFactory<PV522ImportContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Grades</PageTitle>
+
+<h3> Оценки</h3>
+
+<QuickGrid Class="table academy-table" Items="context.Grades">
+    <PropertyColumn Property="grade => grade.Student" Title="ID" />
+    <PropertyColumn Property="grade => grade.Lesson" Title="Урок" />
+    <PropertyColumn Property="grade => grade.Grade1" Title="Оценка 1" />
+    <PropertyColumn Property="grade => grade.Grade2" Title="Оценка 2" />
+</QuickGrid>
+
+@code {
+    private PV522ImportContext context = default!;
+
+    protected override void OnInitialized()
+    {
+        context = DbFactory.CreateDbContext();
+    }
+}

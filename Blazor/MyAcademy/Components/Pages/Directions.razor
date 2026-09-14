@@ -1,0 +1,28 @@
+﻿@page "/directions"
+@rendermode InteractiveServer
+
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using Microsoft.EntityFrameworkCore
+@using MyAcademy.Data;
+@using MyAcademy.Models
+
+@inject IDbContextFactory<PV522ImportContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Directions</PageTitle>
+
+<h3>Направления обучения</h3>
+
+<QuickGrid Class="table academy-table" Items="context.Directions">
+    <PropertyColumn Property="direction => direction.DirectionId" Title="ID" />
+    <PropertyColumn Property="direction => direction.DirectionName" Title="Название направления" />
+</QuickGrid>
+
+@code {
+    private PV522ImportContext context = default!;
+
+    protected override void OnInitialized()
+    {
+        context = DbFactory.CreateDbContext();
+    }
+}

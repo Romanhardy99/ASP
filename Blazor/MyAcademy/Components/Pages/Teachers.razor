@@ -1,0 +1,32 @@
+﻿@page "/teachers"
+@rendermode InteractiveServer
+
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using Microsoft.EntityFrameworkCore
+@using  MyAcademy.Data;
+@using MyAcademy.Models
+
+@inject IDbContextFactory<PV522ImportContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Teachers</PageTitle>
+
+<h1>Преподаватели Академии ТОП</h1>
+
+<QuickGrid Class="table academy-table" Items="context.Teachers">
+    <PropertyColumn Property="teacher => teacher.TeacherId" Title="ID" />
+    <PropertyColumn Property="teacher => teacher.LastName" Title="Фамилия" />
+    <PropertyColumn Property="teacher => teacher.FirstName" Title="Имя" />
+    <PropertyColumn Property="teacher => teacher.MiddleName" Title="Отчество" />
+    <PropertyColumn Property="teacher => teacher.Email" Title="Email" />
+    <PropertyColumn Property="teacher => teacher.Phone" Title="Телефон" />
+</QuickGrid>
+
+@code {
+    private PV522ImportContext context = default!;
+
+    protected override void OnInitialized()
+    {
+        context = DbFactory.CreateDbContext();
+    }
+}

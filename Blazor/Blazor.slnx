@@ -2,4 +2,5 @@
   <Project Path="Blazor/Blazor.csproj" />
   <Project Path="Converter/Converter.csproj" Id="3d27fee3-1c9c-420c-b5c0-23ec36c4e933" />
   <Project Path="Movies/Movies.csproj" Id="f8bfd5be-a9b5-4345-b2b9-038f5bba512c" />
+  <Project Path="MyAcademy/MyAcademy.csproj" Id="fa448229-ab4a-4396-8428-2435b5f7a066" />
 </Solution>

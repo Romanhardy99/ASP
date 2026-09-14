@@ -1,0 +1,79 @@
+﻿@page "/"
+@rendermode InteractiveServer
+
+@using Microsoft.EntityFrameworkCore
+@using MyAcademy.Data
+
+@inject IDbContextFactory<PV522ImportContext> DbFactory
+
+<PageTitle>Главная</PageTitle>
+
+<div class="dashboard">
+
+    <div class="dashboard-header">
+        <h1>Академия ТОП</h1>
+        <p>Система управления учебными данными</p>
+    </div>
+
+    <div class="statistics">
+
+        <div class="stat-card">
+            <div class="stat-title">Студенты</div>
+            <div class="stat-value">125</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-title">Группы</div>
+            <div class="stat-value">12</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-title">Преподаватели</div>
+            <div class="stat-value">24</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-title">Дисциплины</div>
+            <div class="stat-value">38</div>
+        </div>
+
+    </div>
+
+    <div class="quick-actions">
+
+        <NavLink class="action-button" href="students">
+            Студенты
+        </NavLink>
+
+        <NavLink class="action-button" href="teachers">
+            Преподаватели
+        </NavLink>
+
+        <NavLink class="action-button" href="groups">
+            Группы
+        </NavLink>
+
+        <NavLink class="action-button" href="disciplines">
+            Дисциплины
+        </NavLink>
+
+    </div>
+
+</div>
+
+@code
+{
+    private int studentCount;
+    private int groupCount;
+    private int teacherCount;
+    private int disciplineCount;
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = await DbFactory.CreateDbContextAsync();
+        studentCount = await context.Students.CountAsync();
+        groupCount = await context.Groups.CountAsync();
+        teacherCount = await context.Teachers.CountAsync();
+        disciplineCount = await context.Disciplines.CountAsync();
+    }
+}
