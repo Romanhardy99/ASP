@@ -1,7 +1,32 @@
 ﻿@page "/holidays"
 
-<h3>Holidays</h3>
+@rendermode InteractiveServer
+
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using Microsoft.EntityFrameworkCore
+@using MyAcademy.Data;
+@using MyAcademy.Models
+
+@inject IDbContextFactory<PV522ImportContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Holidays</PageTitle>
+
+<h3>Праздничные дни</h3>
+
+<QuickGrid Class="table academy-table" Items="context.Holidays">
+    <PropertyColumn Property="holiday => holiday.HolidayId" Title="ID" />
+    <PropertyColumn Property="holiday => holiday.HolidayName" Title="Название праздника" />
+    <PropertyColumn Property="holiday => holiday.Day" Title="День" />
+    <PropertyColumn Property="holiday => holiday.Duration" Title="Продолжительность" />
+    <PropertyColumn Property="holiday => holiday.Month" Title="Месяц" />
+</QuickGrid>
 
 @code {
+    private PV522ImportContext context = default!;
 
+    protected override void OnInitialized()
+    {
+        context = DbFactory.CreateDbContext();
+    }
 }

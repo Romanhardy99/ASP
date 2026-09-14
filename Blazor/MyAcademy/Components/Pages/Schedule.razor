@@ -1,7 +1,32 @@
 ﻿@page "/schedule"
+@rendermode InteractiveServer
 
-<h3>Schedule</h3>
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using Microsoft.EntityFrameworkCore
+@using MyAcademy.Data;
+@using MyAcademy.Models
+
+@inject IDbContextFactory<PV522ImportContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Schedule</PageTitle>
+
+<h3>Расписание</h3>
+
+<QuickGrid Class="table academy-table" Items="context.Schedules">
+    <PropertyColumn Property="schedule => schedule.LessonId" Title="ID" />
+    <PropertyColumn Property="schedule => schedule.Discipline" Title="Дисциплина" />
+    <PropertyColumn Property="schedule => schedule.Teacher" Title="Преподаватель" />
+    <PropertyColumn Property="schedule => schedule.Date" Title="Дата" />
+    <PropertyColumn Property="schedule => schedule.Time" Title="Время" />
+    <PropertyColumn Property="schedule => schedule.Spent" Title="Пропуски" />
+</QuickGrid>
 
 @code {
+    private PV522ImportContext context = default!;
 
+    protected override void OnInitialized()
+    {
+        context = DbFactory.CreateDbContext();
+    }
 }

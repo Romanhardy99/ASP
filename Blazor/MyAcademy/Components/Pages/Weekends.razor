@@ -1,7 +1,28 @@
 ﻿@page "/weekends"
 
-<h3>Weekends</h3>
+@rendermode InteractiveServer
+
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using Microsoft.EntityFrameworkCore
+@using MyAcademy.Data;
+@using MyAcademy.Models
+
+@inject IDbContextFactory<PV522ImportContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Weekends</PageTitle>
+<h3>Выходные</h3>
+
+<QuickGrid Class="table academy-table" Items="context.DaysOffs">
+    <PropertyColumn Property="daysOff => daysOff.Date" Title="Дата" />
+    <PropertyColumn Property="daysOff => daysOff.Holiday" Title="Праздничный день" />
+</QuickGrid>
 
 @code {
+    private PV522ImportContext context = default!;
 
+    protected override void OnInitialized()
+    {
+        context = DbFactory.CreateDbContext();
+    }
 }

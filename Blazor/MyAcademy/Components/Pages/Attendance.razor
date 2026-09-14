@@ -1,7 +1,29 @@
 ﻿@page "/attendance"
+@rendermode InteractiveServer
 
-<h3>Attendance</h3>
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using Microsoft.EntityFrameworkCore
+@using MyAcademy.Data;
+@using MyAcademy.Models
+
+@inject IDbContextFactory<PV522ImportContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Attendance</PageTitle>
+
+<h3>Посещаемость</h3>
+
+<QuickGrid Class="table academy-table" Items="context.Attendances">
+    <PropertyColumn Property="attendance => attendance.Student" Title="Студент" />
+    <PropertyColumn Property="attendance => attendance.Lesson" Title="Урок" />
+    <PropertyColumn Property="attendance => attendance.Present" Title="Присутствие" />
+</QuickGrid>
 
 @code {
+    private PV522ImportContext context = default!;
 
+    protected override void OnInitialized()
+    {
+        context = DbFactory.CreateDbContext();
+    }
 }

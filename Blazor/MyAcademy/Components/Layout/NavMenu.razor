@@ -23,9 +23,11 @@
         <!-- Учебный процесс -->
         <div class="nav-item px-3">
             <button class="nav-link menu-button" @onclick="ToggleEducation">
-                <span class="bi bi-book" aria-hidden="true"></span>
-                Учебный процесс
-                <span class="arrow">@(educationOpen ? "▼" : "▶")</span>
+                <span class="bi bi-mortarboard-fill" aria-hidden="true"></span>
+                <span>Учебный процесс</span>
+
+                <span class="bi @(educationOpen ? "bi-chevron-down" : "bi-chevron-right") arrow"
+                      aria-hidden="true"></span>
             </button>
         </div>
 
@@ -72,9 +74,11 @@
         <!-- Расписание -->
         <div class="nav-item px-3">
             <button class="nav-link menu-button" @onclick="ToggleSchedule">
-                <span class="bi bi-calendar" aria-hidden="true"></span>
-                Расписание
-                <span class="arrow">@(scheduleOpen ? "▼" : "▶")</span>
+                <span class="bi bi-calendar3" aria-hidden="true"></span>
+                <span>Расписание</span>
+
+                <span class="bi @(scheduleOpen ? "bi-chevron-down" : "bi-chevron-right") arrow"
+                      aria-hidden="true"></span>
             </button>
         </div>
 
