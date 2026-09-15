@@ -2,7 +2,12 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using MyAcademy.Models;
-
+//Scaffold-DbContext
+    //"Server=HOME-PC\SQLEXPRESS;
+    //Database=PV_522_Import;
+    //Trusted_Connection=True;
+    //TrustServerCertificate=True;
+    //"Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -ContextDir Data -Context PV522ImportContext
 namespace MyAcademy.Data;
 
 public partial class PV522ImportContext : DbContext
