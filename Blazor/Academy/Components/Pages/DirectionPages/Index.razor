@@ -1,4 +1,5 @@
 @page "/directions"
+@rendermode InteractiveServer
 @using Microsoft.AspNetCore.Components.QuickGrid
 @using Microsoft.EntityFrameworkCore
 @using Academy.Models
@@ -14,8 +15,40 @@
     <a href="directions/create">Create New</a>
 </p>
 
-<QuickGrid Class="table" Items="context.Directions">
-    <PropertyColumn Property="direction => direction.direction_name" />
+<div class="direction-filters mb-3">
+
+    <div style="max-width: 300px;">
+        <label for="search" class="form-label">
+            Поиск по названию:
+        </label>
+
+        <input type="text" 
+               id="search" 
+               class="form-control"
+               placeholder="Введите название..."
+               @bind="searchText"
+               @bind:event="oninput" />
+    </div>
+        
+    <div style="max-width: 200px;">
+        <label for="pageSize" class="form-label">
+            Направлений на странице:
+         </label>
+
+        <input type="number"
+               id="pageSize"
+               class="form-control"
+                value="@pagination.ItemsPerPage"
+               min="1"
+                max="100"
+               @onchange="OnPageSizeChanged" />
+    </div>
+</div>
+
+<QuickGrid Class="table" Items="FilteredDirections" Pagination="pagination">
+    <PropertyColumn Property="direction => direction.direction_name" 
+        Title="Направление" 
+        Sortable="true"/>
 
     <TemplateColumn Context="direction">
         <a href="@($"directions/edit?direction_id={direction.direction_id}")">Edit</a> |
@@ -24,13 +57,32 @@
     </TemplateColumn>
 </QuickGrid>
 
+<Paginator State="pagination" />
+
 @code {
     private AcademyContext context = default!;
+
+    private PaginationState pagination = new PaginationState { ItemsPerPage = 12 };
+
+    private string? searchText;
+
+    private IQueryable<Direction> FilteredDirections =>
+    string.IsNullOrWhiteSpace(searchText)
+        ? context.Directions
+        : context.Directions.Where(d => d.direction_name.Contains(searchText));
 
     protected override void OnInitialized()
     {
         context = DbFactory.CreateDbContext();
     }
 
+    private async Task OnPageSizeChanged(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out var value) && value > 0)
+        {
+            pagination.ItemsPerPage = value;
+            await pagination.SetCurrentPageIndexAsync(0);
+        }
+    }
     public async ValueTask DisposeAsync() => await context.DisposeAsync();
 }
