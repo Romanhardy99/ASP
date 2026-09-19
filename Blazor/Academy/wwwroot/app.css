@@ -1,5 +1,11 @@
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-image: url('/academy.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
 }
 
 a, .btn-link {
@@ -13,7 +19,7 @@ a, .btn-link {
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 .content {
@@ -59,10 +65,61 @@ h1:focus {
     text-align: start;
 }
 
-.table tr:has(> td:not(:empty)) > td {
-    display: table-cell;
+.academy-table {
+    --bs-table-color: white;
+    --bs-table-bg: transparent;
+    background-color: transparent;
+    color: white;
+    font-weight: 600;
 }
 
-.table td:empty {
-    display: none;
-}
+    .academy-table th,
+    .academy-table td {
+        --bs-table-color: white;
+        background-color: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+
+    .academy-table th {
+        background-color: rgba(0, 0, 0, 0.45);
+    }
+
+        .academy-table th,
+        .academy-table th * {
+            color: white !important;
+        }
+
+    .academy-table td {
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+
+    .academy-table tbody tr {
+        transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+
+        .academy-table tbody tr:hover {
+            background-color: rgba(255, 140, 26, 0.25) !important;
+            transform: scale(1.01);
+            cursor: pointer;
+        }
+
+            .academy-table tbody tr:hover td {
+                background-color: transparent;
+            }
+
+    .academy-table a {
+        color: white;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+        .academy-table a:hover {
+            text-decoration: underline;
+        }
+    .academy-table tr:has(> td:not(:empty)) > td {
+        display: table-cell;
+    }
+
+    .academy-table td:empty {
+        display: none;
+    }

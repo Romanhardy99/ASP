@@ -10,26 +10,116 @@
     <nav class="nav flex-column">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
+                <span class="bi bi-house" aria-hidden="true"></span> Главная
             </NavLink>
         </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="Directions">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Directions
+                <span class="bi bi-stack" aria-hidden="true"></span> Directions
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="Groups">
+                <span class="bi bi-stack" aria-hidden="true"></span> Groups
             </NavLink>
         </div>
     </nav>
+
+    <!-- Учебный процесс -->
+    <div class="nav-item px-3">
+        <button class="nav-link menu-button" @onclick="ToggleEducation">
+            <span class="bi bi-mortarboard-fill" aria-hidden="true"></span>
+            <span>Учебный процесс</span>
+
+            <span class="bi @(educationOpen ? "bi-chevron-down" : "bi-chevron-right") arrow"
+                  aria-hidden="true"></span>
+        </button>
+    </div>
+
+    @if (educationOpen)
+    {
+        <div class="submenu">
+
+            <NavLink class="nav-link" href="students">
+                Студенты
+            </NavLink>
+
+            <NavLink class="nav-link" href="groups">
+                Группы
+            </NavLink>
+
+            <NavLink class="nav-link" href="directions">
+                Направления
+            </NavLink>
+
+            <NavLink class="nav-link" href="disciplines">
+                Дисциплины
+            </NavLink>
+
+            <NavLink class="nav-link" href="teachers">
+                Преподаватели
+            </NavLink>
+
+            <NavLink class="nav-link" href="grades">
+                Оценки
+            </NavLink>
+
+            <NavLink class="nav-link" href="exams">
+                Экзамены
+            </NavLink>
+
+            <NavLink class="nav-link" href="attendance">
+                Посещаемость
+            </NavLink>
+
+        </div>
+    }
+    <!-- Расписание -->
+    <div class="nav-item px-3">
+        <button class="nav-link menu-button" @onclick="ToggleSchedule">
+            <span class="bi bi-calendar3" aria-hidden="true"></span>
+            <span>Расписание</span>
+
+            <span class="bi @(scheduleOpen ? "bi-chevron-down" : "bi-chevron-right") arrow"
+                  aria-hidden="true"></span>
+        </button>
+    </div>
+
+    @if (scheduleOpen)
+    {
+        <div class="submenu">
+
+            <NavLink class="nav-link" href="schedule">
+                Расписание
+            </NavLink>
+
+            <NavLink class="nav-link" href="weekends">
+                Выходные дни
+            </NavLink>
+
+            <NavLink class="nav-link" href="holidays">
+                Праздники
+            </NavLink>
+
+        </div>
+    }
 </div>
+
+
+
+@code
+{
+    private bool educationOpen = false;
+    private bool scheduleOpen = false;
+
+    private void ToggleEducation()
+    {
+        educationOpen = !educationOpen;
+    }
+
+    private void ToggleSchedule()
+    {
+        scheduleOpen = !scheduleOpen;
+    }
+}
 
