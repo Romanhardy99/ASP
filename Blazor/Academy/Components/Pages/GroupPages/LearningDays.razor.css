@@ -1,0 +1,7 @@
+/* CSS for LearningDays component */
+.learning-days{
+    list-style:none;
+    display:flex;
+    justify-content:space-between;
+    padding:0px;
+}
