@@ -20,8 +20,8 @@ namespace Academy.Models
         public DateOnly? start_date { get; set; }
         public TimeOnly? start_time { get; set; }
 
-        [Column(TypeName="TINYINT")]
-        public int? learning_days { get; set; }
+        [Column(TypeName = "TINYINT")]
+        public int? learning_days { get; set; } = 0;
 
         //Navigation Properties:
         public Direction Direction { get; set; }

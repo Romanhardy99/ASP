@@ -8,14 +8,16 @@
 
 <PageTitle>Groups</PageTitle>
 
-<h1>Группы</h1>
+<div class="controls">
+    <h1>Группы</h1>
 
-<p>
-    <a href="groups/create" class="btn btn-primary">Добавить</a>
-</p>
+    <p>
+        <a href="groups/create" class="btn btn-primary">Добавить</a>
+    </p>
+</div>
 
 <QuickGrid Class="academy-table" Items="context.Groups">
-    <PropertyColumn Property="group => group.group_name" />
+    <PropertyColumn Property="group => group.group_name" Title="Название группы"/>
     <PropertyColumn Property="group => group.direction" />
     <PropertyColumn Property="group => group.start_date" />
     <PropertyColumn Property="group => group.start_time" />

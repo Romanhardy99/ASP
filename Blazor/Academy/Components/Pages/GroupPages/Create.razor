@@ -52,11 +52,7 @@
                 <InputNumber id="learning_days" @bind-Value="Group.learning_days" class="form-control" /> 
                 <ValidationMessage For="() => Group.learning_days" class="text-danger" /> 
             </div>        
-            @* <div class="mb-3">
-                <label for="direction" class="form-label">Direction:</label> 
-                <InputText id="direction" @bind-Value="Group.Direction" class="form-control" /> 
-                <ValidationMessage For="() => Group.Direction" class="text-danger" /> 
-            </div>     *@    
+           <LearningDays Group="Group"/>
             <button type="submit" class="btn btn-primary">Create</button>
         </EditForm>
     </div>
