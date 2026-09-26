@@ -17,10 +17,13 @@
 <h1>Студенты</h1>
 <div class="student-filters mb-3">
     <div style="max-width: 300px;">
-        <label for="search" class="form-label">Поиск по имени/фамилии:</label>
-        <input type="text" id="search" class="form-control"
-               placeholder="Введите имя или фамилию..."
-               @bind="searchText" @bind:event="oninput" />
+        <form action="/Students" data-enhance>
+            <label for="search" class="form-label">Поиск по имени/фамилии:</label>
+            <input type="text" id="search" class="form-control"
+                   placeholder="Введите имя или фамилию..."
+                   @bind="searchText" @bind:event="oninput" />
+                  
+        </form>
     </div>
 
     <div style="max-width: 200px;">
@@ -32,6 +35,7 @@
     </div>
 </div>
 
+@* <QuickGrid Class="table" Items="context.Students.Include(s => s.Group).ThenInclude(g => g.Direction)"> *@
 <QuickGrid Class="academy-table" Items="FilteredStudents" Pagination="pagination">
     <TemplateColumn Context="student"
                     Title="Student"
@@ -57,16 +61,19 @@
 
     private PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
-    private string? searchText;
+    [SupplyParameterFromQuery]
+    string? searchText { get; set; }
 
     GridSort<Student> sortBy = GridSort<Student>.ByAscending(s => s.last_name).
                                                  ThenAscending(s => s.first_name);
 
     IQueryable<Student> FilteredStudents =>
-        string.IsNullOrWhiteSpace(searchText)
-            ? context.Students.Include(s => s.Group).ThenInclude(g => g.Direction)
-                : context.Students.Include(s => s.Group).ThenInclude(g => g.Direction)
-                            .Where(s => s.last_name.Contains(searchText) || s.first_name.Contains(searchText));
+            context.Students
+            .Include(s => s.Group)
+            .ThenInclude(s => s.Direction)
+            .AsEnumerable()
+            .Where(s => s.FullName.Contains(searchText ?? string.Empty))
+            .AsQueryable();
 
 
     protected override void OnInitialized()
