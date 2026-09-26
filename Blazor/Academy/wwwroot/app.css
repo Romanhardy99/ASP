@@ -6,7 +6,6 @@ html, body {
     background-repeat: no-repeat;
     background-attachment: fixed;
 }
-}
 
 a, .btn-link {
     color: #006bb7;
@@ -122,4 +121,36 @@ h1:focus {
 
     .academy-table td:empty {
         display: none;
+    }
+
+.student-filters {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-end;
+}
+
+.top-row a {
+    color: #d7d7d7;
+    text-decoration: none;
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+}
+
+    .top-row a:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+.top-row {
+    background-color: rgba(26, 34, 51, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    justify-content: space-between;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+}
+
+    .top-row a {
+        margin-left: 1.5rem;
     }

@@ -7,57 +7,81 @@
 @inject IDbContextFactory<AcademyContext> DbFactory
 @inject NavigationManager NavigationManager
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Student</PageTitle>
 
-<div class="controls">
-    <h1>Студенты</h1>
+<SectionContent SectionName="page-actions">
+    <a href="students/create">Добавить</a>
+</SectionContent>
 
-    <p>
-        <a href="students/create" class="btn btn-primary">Добавить</a>
-    </p>
+
+<h1>Студенты</h1>
+<div class="student-filters mb-3">
+    <div style="max-width: 300px;">
+        <label for="search" class="form-label">Поиск по имени/фамилии:</label>
+        <input type="text" id="search" class="form-control"
+               placeholder="Введите имя или фамилию..."
+               @bind="searchText" @bind:event="oninput" />
+    </div>
+
+    <div style="max-width: 200px;">
+        <label for="pageSize" class="form-label">Студентов на странице:</label>
+        <input type="number" id="pageSize" class="form-control"
+               value="@pagination.ItemsPerPage"
+               min="1" max="100"
+               @onchange="OnPageSizeChanged" />
+    </div>
 </div>
 
-<QuickGrid Class="academy-table" Items="context.Students.Include(s => s.Group).ThenInclude(g => g.Direction)">
-    @*  <PropertyColumn Property="student => student.last_name" />
-    <PropertyColumn Property="student => student.first_name" />
-    <PropertyColumn Property="student => student.middle_name" /> *@
+<QuickGrid Class="academy-table" Items="FilteredStudents" Pagination="pagination">
     <TemplateColumn Context="student"
                     Title="Student"
                     Sortable="true"
                     SortBy="sortBy">
         <a href="@($"students/details?stud_id={student.stud_id}")">@student.FullName</a>
     </TemplateColumn>
-    @* <PropertyColumn property="student => student.FullName" Sortable="true"/> *@
     <PropertyColumn Property="student => student.birth_date" Sortable="true" />
     <TemplateColumn Context="student"
                     Title="Age"
                     Sortable="true"
-                    SortBy="GridSort<Student>.ByDescending(s => s.birth_date)"
-                    >
-                    @student.Age
+                    SortBy="GridSort<Student>.ByDescending(s => s.birth_date)">
+        @student.Age
     </TemplateColumn>
     <PropertyColumn Property="student => student.Group.group_name" Sortable="true" />
     <PropertyColumn Property="student => student.Group.Direction.direction_name" />
-    @*  <PropertyColumn Property="student => student.email" />
-    <PropertyColumn Property="student => student.phone" />
-    <PropertyColumn Property="student => student.photo" /> *@
-
-    @* <TemplateColumn Context="student">
-        <a href="@($"students/edit?stud_id={student.stud_id}")">Edit</a> |
-        <a href="@($"students/details?stud_id={student.stud_id}")">Details</a> |
-        <a href="@($"students/delete?stud_id={student.stud_id}")">Delete</a> |
-    </TemplateColumn> *@
 </QuickGrid>
+
+<Paginator State="pagination" />
 
 @code {
     private AcademyContext context = default!;
-    IQueryable<Student> students = default!;
+
+    private PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
+
+    private string? searchText;
+
     GridSort<Student> sortBy = GridSort<Student>.ByAscending(s => s.last_name).
                                                  ThenAscending(s => s.first_name);
+
+    IQueryable<Student> FilteredStudents =>
+        string.IsNullOrWhiteSpace(searchText)
+            ? context.Students.Include(s => s.Group).ThenInclude(g => g.Direction)
+                : context.Students.Include(s => s.Group).ThenInclude(g => g.Direction)
+                            .Where(s => s.last_name.Contains(searchText) || s.first_name.Contains(searchText));
+
+
     protected override void OnInitialized()
     {
         context = DbFactory.CreateDbContext();
-        students = context.Students.Include(s => s.Group);
+
+    }
+
+    private async Task OnPageSizeChanged(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out int value) && value > 0)
+        {
+            pagination.ItemsPerPage = value;
+            await pagination.SetCurrentPageIndexAsync(0);
+        }
     }
 
     public async ValueTask DisposeAsync() => await context.DisposeAsync();
