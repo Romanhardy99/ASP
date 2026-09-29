@@ -1,7 +1,29 @@
 ﻿.human-container {
-    display:flex;
-    justify-content:space-between;
+    display: flex;
+    justify-content: space-between;
 }
-.photo-area > img{
-    width:80%;
+
+.human-text-fields {
+    width: 20%;
+}
+
+.photo-area {
+    width: 50%;
+    text-align: center;
+}
+
+    .photo-area > div {
+        width: 90%;
+        height: 90%;
+        border: solid 1px;
+    }
+
+    .photo-area img {
+        width: 100%;
+        margin: 100px;
+    }
+
+.choose-photo {
+    width: 50%;
+    margin: 20px;
 }
