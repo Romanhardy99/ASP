@@ -6,8 +6,6 @@
 
 <PageTitle>Edit</PageTitle>
 
-<h1>Внести изменения</h1>
-
 <hr />
 @if (Student is null)
 {
@@ -15,6 +13,10 @@
 }
 else
 {
+    <h1>
+        @Student.FullName
+    </h1>
+    <hr/>
     <div class="row">
         @* <div class="col-md-3"> *@
             <EditForm method="post" Model="Student" OnValidSubmit="UpdateStudent" FormName="edit" Enhance>
