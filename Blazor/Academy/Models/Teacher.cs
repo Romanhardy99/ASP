@@ -16,5 +16,7 @@ namespace Academy.Models
 
         [Column("rate", TypeName = "SMALLMONEY")]
         public decimal rate { get; set; }
+
+        public ICollection<TeachersDisciplinesRelation> TDR { get; set; }
     }
 }

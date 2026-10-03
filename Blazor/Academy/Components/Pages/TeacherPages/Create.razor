@@ -6,9 +6,7 @@
 
 <PageTitle>Create</PageTitle>
 
-<h1>Create</h1>
-
-<h2>Teacher</h2>
+<h1>Добавить преподавателя</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -84,6 +82,6 @@
         using var context = DbFactory.CreateDbContext();
         context.Teachers.Add(Teacher);
         await context.SaveChangesAsync();
-        NavigationManager.NavigateTo("/teachers");
+        NavigationManager.NavigateTo($"/teachers/details?teacher_id={Teacher.teacher_id}");
     }
 }
