@@ -1,0 +1,90 @@
+@page "/disciplines/details"
+@using Microsoft.EntityFrameworkCore
+@using Academy.Models
+@inject IDbContextFactory<AcademyContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Details</PageTitle>
+
+<div>
+    @* <h2>Discipline</h2>
+    <hr /> *@
+    @if (discipline is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <h2>@discipline.discipline_name</h2>
+        <hr />
+        <dl class="row">
+            @* <dt class="col-sm-2">Название дисциплины</dt> <dd class="col-sm-10">@discipline.discipline_name</dd> *@
+            <dt class="col-sm-2">Количество занятий</dt><dd class="col-sm-10">@discipline.number_of_lessons</dd>
+          @*   <dt class="col-sm-2">TDR</dt> <dd class="col-sm-10">@discipline.TDR</dd> *@
+        </dl>
+        <div>
+            <a href="@($"/disciplines")">Back to List</a>
+        </div>
+        <h3>Преподаватели (@discipline.TDR.Count):</h3>
+        
+        @if (discipline.TDR.Any())
+        {
+            <ul>
+                @foreach (TeachersDisciplinesRelation tdr in discipline.TDR)
+                {
+                    <li>
+                        <a href="@($"/teacher/details?teacher_id={tdr.Teacher.teacher_id}")">
+                            @tdr.Teacher.FullName    
+                        </a>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p><em>Преподаватели не назначены</em></p>
+        }
+    }
+</div>
+
+@code {
+    private Discipline? discipline;
+
+    [SupplyParameterFromQuery]
+    private int discipline_id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+
+        discipline = await context.Disciplines
+                                    .Include(d => d.TDR)
+                                    .ThenInclude(tdr => tdr.Teacher)
+                                    .FirstOrDefaultAsync(m => m.discipline_id == discipline_id);
+
+        if (discipline is null)
+        {
+            NavigationManager.NotFound();
+        }
+    }
+}
+
+@* @code {
+    private Teacher? teacher;
+
+    [SupplyParameterFromQuery]
+    private int teacher_id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        teacher = await context.Teachers
+                                .Include(t => t.TDR)
+                                .ThenInclude(tdr => tdr.Discipline)
+                                .FirstOrDefaultAsync(m => m.teacher_id == teacher_id);
+
+        if (teacher is null)
+        {
+            NavigationManager.NotFound();
+        }
+    }
+} *@

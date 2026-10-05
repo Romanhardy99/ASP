@@ -11,12 +11,13 @@ namespace Academy.Models
 
         [Required]
         [StringLength(150)]
-        public string discipline_name { get; set; }
+        public string discipline_name { get; set; } = string.Empty;
 
         [Required]
+        [Range(0, 255)]
         [Column(TypeName ="TINYINT")]
         public int number_of_lessons { get; set; }
 
-        public ICollection<TeachersDisciplinesRelation> TDR {  get; set; }
+        public ICollection<TeachersDisciplinesRelation> TDR { get; set; } = new List<TeachersDisciplinesRelation>();
     }
 }
