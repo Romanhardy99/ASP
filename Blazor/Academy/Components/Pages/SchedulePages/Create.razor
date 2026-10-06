@@ -1,0 +1,71 @@
+@page "/schedules/create"
+@using Microsoft.EntityFrameworkCore
+@using Academy.Models
+@inject IDbContextFactory<AcademyContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h2>Schedule</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="Schedule" OnValidSubmit="AddSchedule" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" role="alert"/>
+            <div class="mb-3">
+                <label for="group" class="form-label">group:</label> 
+                <InputNumber id="group" @bind-Value="Schedule.group" class="form-control" /> 
+                <ValidationMessage For="() => Schedule.group" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="discipline" class="form-label">discipline:</label> 
+                <InputNumber id="discipline" @bind-Value="Schedule.discipline" class="form-control" /> 
+                <ValidationMessage For="() => Schedule.discipline" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="teacher" class="form-label">teacher:</label> 
+                <InputNumber id="teacher" @bind-Value="Schedule.teacher" class="form-control" /> 
+                <ValidationMessage For="() => Schedule.teacher" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="date" class="form-label">date:</label> 
+                <InputDate id="date" @bind-Value="Schedule.date" class="form-control" /> 
+                <ValidationMessage For="() => Schedule.date" class="text-danger" /> 
+            </div>        
+           @*  <div class="mb-3">
+                <label for="time" class="form-label">time:</label> 
+                <InputText id="time" @bind-Value="Schedule.time" class="form-control" /> 
+                <ValidationMessage For="() => Schedule.time" class="text-danger" /> 
+            </div>    *@     
+            <div class="mb-3">
+                <label for="spent" class="form-label">spent:</label> 
+                <InputCheckbox id="spent" @bind-Value="Schedule.spent" class="form-check-input" /> 
+                <ValidationMessage For="() => Schedule.spent" class="text-danger" /> 
+            </div>        
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/schedules">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private Schedule Schedule { get; set; } = default!;
+
+    protected override void OnInitialized() => Schedule ??= new();
+
+    // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task AddSchedule()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Schedule.Add(Schedule);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/schedules");
+    }
+}

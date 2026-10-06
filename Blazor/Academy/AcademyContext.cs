@@ -11,4 +11,5 @@ public class AcademyContext : DbContext
     public DbSet<Academy.Models.Student> Students { get; set; } = default!;
     public DbSet<Academy.Models.Teacher> Teachers { get; set; } = default!;
     public DbSet<Academy.Models.Discipline> Disciplines { get; set; } = default!;
+    public DbSet<Academy.Models.Schedule> Schedule { get; set; } = default!;
 }
