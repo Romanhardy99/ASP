@@ -1,6 +1,7 @@
 ﻿.human-container {
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
     gap: 2%;
 }
 
@@ -8,8 +9,34 @@
     width: 55%;
 }
 
+    .human-text-fields dl.row {
+        margin: 0;
+    }
+
+    .human-text-fields dt,
+    .human-text-fields dd {
+        padding: 0.6rem 0;
+        margin: 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .human-text-fields dt {
+        color: rgba(255, 255, 255, 0.6);
+        font-weight: 500;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 0.03em;
+    }
+
+    .human-text-fields dd {
+        color: white;
+        font-size: 1.05rem;
+        font-weight: 600;
+    }
+
 .photo-area {
     width: 43%;
+    max-width: 280px;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -20,7 +47,8 @@
     .photo-area > div {
         width: 100%;
         aspect-ratio: 1 / 1;
-        border: solid 1px;
+        border: solid 1px rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
         overflow: hidden;
         display: flex;
         align-items: center;

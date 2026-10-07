@@ -19,22 +19,22 @@
 
         <div class="stat-card">
             <div class="stat-title">Студенты</div>
-            <div class="stat-value">125</div>
+            <div class="stat-value">@studentCount</div>
         </div>
 
         <div class="stat-card">
             <div class="stat-title">Группы</div>
-            <div class="stat-value">12</div>
+            <div class="stat-value">@groupCount</div>
         </div>
 
         <div class="stat-card">
             <div class="stat-title">Преподаватели</div>
-            <div class="stat-value">24</div>
+            <div class="stat-value">@teacherCount</div>
         </div>
 
         <div class="stat-card">
             <div class="stat-title">Дисциплины</div>
-            <div class="stat-value">38</div>
+            <div class="stat-value">@disciplineCount</div>
         </div>
 
     </div>
@@ -73,7 +73,7 @@
         using var context = await DbFactory.CreateDbContextAsync();
         studentCount = await context.Students.CountAsync();
         groupCount = await context.Groups.CountAsync();
-        // teacherCount = await context.Teachers.CountAsync();
-        // disciplineCount = await context.Disciplines.CountAsync();
+        teacherCount = await context.Teachers.CountAsync();
+        disciplineCount = await context.Disciplines.CountAsync();
     }
 }

@@ -52,14 +52,14 @@ else
                     <InputCheckbox id="spent" @bind-Value="Schedule.spent" class="form-check-input" />
                     <ValidationMessage For="() => Schedule.spent" class="text-danger" />
                 </div>
-                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="submit" class="btn btn-primary">Сохранить</button>
             </EditForm>
         </div>
     </div>
 }
 
 <div>
-    <a href="/schedules">Back to List</a>
+    <a href="/schedules" class="btn btn-secondary">Назад к списку</a>
 </div>
 
 @code {

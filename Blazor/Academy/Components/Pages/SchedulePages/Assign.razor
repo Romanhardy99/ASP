@@ -1,0 +1,165 @@
+﻿@page "/schedules/assign"
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.Forms
+@using Academy.Models
+@implements IAsyncDisposable
+@inject IDbContextFactory<AcademyContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Назначение расписания</PageTitle>
+
+@if (group is null || teacher is null)
+{
+    <p><em>Загрузка...</em></p>
+}
+else
+{
+    <h1>Расписание: @group.group_name — @teacher.FullName</h1>
+    <hr />
+
+    <h3>Уже назначенные занятия</h3>
+
+    @if (existingLessons.Count == 0)
+    {
+        <p><em>Пока нет записей</em></p>
+    }
+    else
+    {
+        <table class="academy-table">
+            <thead>
+                <tr>
+                    <th>Дисциплина</th>
+                    <th>Дата</th>
+                    <th>Время</th>
+                    <th>Проведено</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var lesson in existingLessons)
+                {
+                    <tr>
+                        <td>@lesson.Discipline?.discipline_name</td>
+                        <td>@lesson.date</td>
+                        <td>@lesson.time</td>
+                        <td>@(lesson.spent ? "Да" : "Нет")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <hr />
+    <h3>Добавить новое занятие</h3>
+
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm Model="newLesson" OnValidSubmit="SaveLesson">
+                <DataAnnotationsValidator />
+                <ValidationSummary class="text-danger" role="alert" />
+
+                <div class="mb-3">
+                    <label for="discipline" class="form-label">Дисциплина:</label>
+                    <InputSelect id="discipline" @bind-Value="selectedDisciplineId" class="form-control">
+                        <option value="0">-- Выберите дисциплину --</option>
+                        @foreach (var d in disciplines)
+                        {
+                            <option value="@d.discipline_id">@d.discipline_name</option>
+                        }
+                    </InputSelect>
+                </div>
+
+                <div class="mb-3">
+                    <label for="date" class="form-label">Дата:</label>
+                    <InputDate id="date" @bind-Value="selectedDate" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="time" class="form-label">Время:</label>
+                    <InputDate id="time" Type="InputDateType.Time" @bind-Value="selectedTime" class="form-control" />
+                </div>
+
+                <div class="mb-3 form-check">
+                    <InputCheckbox id="spent" @bind-Value="newLesson.spent" class="form-check-input" />
+                    <label for="spent" class="form-check-label">Занятие проведено</label>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="@($"schedules/group?group_id={group_id}")" class="btn btn-secondary">Назад к списку преподавателей</a>
+</div>
+
+@code {
+    private AcademyContext context = default!;
+
+    [SupplyParameterFromQuery]
+    private int group_id { get; set; }
+
+    [SupplyParameterFromQuery]
+    private int teacher_id { get; set; }
+
+    private Group? group;
+    private Teacher? teacher;
+    private List<Discipline> disciplines = new();
+    private List<Schedule> existingLessons = new();
+
+    private Schedule newLesson = new();
+    private int selectedDisciplineId;
+    private DateOnly? selectedDate;
+    private TimeOnly? selectedTime;
+
+    protected override async Task OnInitializedAsync()
+    {
+        context = DbFactory.CreateDbContext();
+
+        group = await context.Groups.FirstOrDefaultAsync(g => g.group_id == group_id);
+        teacher = await context.Teachers.FirstOrDefaultAsync(t => t.teacher_id == teacher_id);
+
+        if (group is null || teacher is null)
+        {
+            NavigationManager.NotFound();
+            return;
+        }
+
+        // Показываем только те дисциплины, которые этот преподаватель реально ведёт
+        var teacherDisciplineIds = await context.TeachersDisciplinesRelations
+            .Where(tdr => tdr.teacher == teacher_id)
+            .Select(tdr => tdr.discipline)
+            .ToListAsync();
+
+        disciplines = await context.Disciplines
+            .Where(d => teacherDisciplineIds.Contains(d.discipline_id))
+            .ToListAsync();
+
+        existingLessons = await context.Schedule
+            .Include(s => s.Discipline)
+            .Where(s => s.group == group_id && s.teacher == teacher_id)
+            .OrderBy(s => s.date).ThenBy(s => s.time)
+            .ToListAsync();
+    }
+
+    private async Task SaveLesson()
+    {
+        if (selectedDisciplineId == 0 || selectedDate is null || selectedTime is null)
+        {
+            return;
+        }
+
+        newLesson.group = group_id;
+        newLesson.teacher = teacher_id;
+        newLesson.discipline = selectedDisciplineId;
+        newLesson.date = selectedDate;
+        newLesson.time = selectedTime.Value.ToTimeSpan();
+
+        context.Schedule.Add(newLesson);
+        await context.SaveChangesAsync();
+
+        NavigationManager.NavigateTo($"/schedules/assign?group_id={group_id}&teacher_id={teacher_id}", forceLoad: true);
+    }
+
+    public async ValueTask DisposeAsync() => await context.DisposeAsync();
+}

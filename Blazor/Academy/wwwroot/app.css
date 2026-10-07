@@ -114,7 +114,8 @@ h1:focus {
 
         .academy-table a:hover {
             text-decoration: underline;
-        } 
+        }
+
     .academy-table tr:has(> td:not(:empty)) > td {
         display: table-cell;
     }
@@ -129,28 +130,64 @@ h1:focus {
     align-items: flex-end;
 }
 
-.top-row a {
-    color: #d7d7d7;
-    text-decoration: none;
-    padding: 0.5rem 0.75rem;
-    border-radius: 4px;
+.form-label {
+    color: white;
+    font-weight: 600;
 }
 
-    .top-row a:hover {
-        background-color: rgba(255, 255, 255, 0.1);
+.form-control,
+.form-select {
+    background-color: rgba(0, 0, 0, 0.35);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        border-color: #ff8c1a;
+        box-shadow: 0 0 0 0.2rem rgba(255, 140, 26, 0.35);
+    }
+
+    .form-select option {
+        background-color: #1a2233;
         color: white;
     }
-.top-row {
-    background-color: rgba(26, 34, 51, 0.6);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    justify-content: space-between;
-    height: 3.5rem;
-    display: flex;
-    align-items: center;
+
+.form-check-input {
+    background-color: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
-    .top-row a {
-        margin-left: 1.5rem;
+    .form-check-input:checked {
+        background-color: #ff8c1a;
+        border-color: #ff8c1a;
+    }
+
+.form-check-label {
+    color: white;
+}
+
+.text-danger {
+    color: #ff6b6b !important;
+}
+
+h1, h2, h3 {
+    color: white;
+}
+.btn-secondary {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+    .btn-secondary:hover {
+        background-color: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.5);
+        color: white;
     }

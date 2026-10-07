@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Academy.Models
 {
+    [Table("TeachersDisciplinesRelation")]
     [PrimaryKey(nameof(teacher), nameof(discipline))]
     public class TeachersDisciplinesRelation
     {

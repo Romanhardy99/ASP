@@ -39,14 +39,14 @@ else
                     <InputText id="tdr" @bind-Value="Discipline.TDR" class="form-control" />
                     <ValidationMessage For="() => Discipline.TDR" class="text-danger" />
                 </div> *@
-                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="submit" class="btn btn-primary">Сохранить</button>
             </EditForm>
         </div>
     </div>
 }
 
 <div>
-    <a href="/disciplines">Back to List</a>
+    <a href="/disciplines" class="btn btn-secondary">Назад к списку</a>
 </div>
 
 @code {

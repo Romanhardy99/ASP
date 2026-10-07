@@ -1,0 +1,96 @@
+﻿@page "/schedules/group"
+@using Microsoft.EntityFrameworkCore
+@using Academy.Models
+@implements IAsyncDisposable
+@inject IDbContextFactory<AcademyContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Преподаватели группы</PageTitle>
+
+@if (group is null)
+{
+    <p><em>Загрузка...</em></p>
+}
+else
+{
+    <h1>@group.group_name</h1>
+    <p>Направление: @group.Direction.direction_name</p>
+    <hr />
+
+    <h3>Преподаватели, ведущие дисциплины направления</h3>
+
+    @if (teachers.Count == 0)
+    {
+        <p><em>Нет преподавателей, ведущих дисциплины этого направления</em></p>
+    }
+    else
+    {
+        <table class="academy-table">
+            <thead>
+                <tr>
+                    <th>Преподаватель</th>
+                    <th>Работает с</th>
+                    <th>Ставка</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var teacher in teachers)
+                {
+                    <tr>
+                        <td>@teacher.FullName</td>
+                        <td>@teacher.work_since</td>
+                        <td>@teacher.rate</td>
+                        <td>
+                            <a href="@($"schedules/assign?group_id={group.group_id}&teacher_id={teacher.teacher_id}")">
+                                Назначить расписание
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+
+<div>
+    <a href="/schedules" class="btn btn-secondary">Назад к списку групп</a>
+</div>
+
+@code {
+    private AcademyContext context = default!;
+
+    [SupplyParameterFromQuery]
+    private int group_id { get; set; }
+
+    private Group? group;
+    private List<Teacher> teachers = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        context = DbFactory.CreateDbContext();
+
+        group = await context.Groups
+            .Include(g => g.Direction)
+            .FirstOrDefaultAsync(g => g.group_id == group_id);
+
+        if (group is null)
+        {
+            NavigationManager.NotFound();
+            return;
+        }
+
+        // Дисциплины, относящиеся к направлению этой группы
+        var disciplineIds = await context.DisciplinesDirectionsRelations
+            .Where(ddr => ddr.direction == group.direction)
+            .Select(ddr => ddr.discipline)
+            .ToListAsync();
+
+        // Преподаватели, которые ведут хотя бы одну из этих дисциплин
+        teachers = await context.Teachers
+            .Where(t => t.TDR.Any(tdr => disciplineIds.Contains(tdr.discipline)))
+            .ToListAsync();
+    }
+
+    public async ValueTask DisposeAsync() => await context.DisposeAsync();
+}

@@ -9,15 +9,17 @@ main {
 }
 
 .sidebar {
-    background: linear-gradient( 180deg, rgba(38, 49, 74, 0.75) 0%, rgba(19, 26, 41, 0.75) 100% );
+    background: linear-gradient(180deg, rgba(38, 49, 74, 0.75) 0%, rgba(19, 26, 41, 0.75) 100%);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     box-shadow: 2px 0 20px rgba(0, 0, 0, 0.3);
 }
 
 .top-row {
-    background-color: #21b711;
-    border-bottom: 1px solid #21b711;
+    background-color: rgba(26, 34, 51, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     justify-content: flex-end;
     height: 3.5rem;
     display: flex;
@@ -28,16 +30,18 @@ main {
         white-space: nowrap;
         margin-left: 1.5rem;
         text-decoration: none;
+        color: #d7d7d7;
     }
 
-    .top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
-        text-decoration: underline;
-    }
+        .top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
+            text-decoration: underline;
+            color: white;
+        }
 
-    .top-row ::deep a:first-child {
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+        .top-row ::deep a:first-child {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
 @media (min-width: 641px) {
     .page {
@@ -55,14 +59,7 @@ main {
         position: sticky;
         top: 0;
         z-index: 1;
-        background-color: rgba(26, 34, 51, 0.6);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         justify-content: space-between;
-        height: 3.5rem;
-        display: flex;
-        align-items: center;
     }
 
         .top-row.auth ::deep a:first-child {
@@ -97,13 +94,3 @@ main {
         right: 0.75rem;
         top: 0.5rem;
     }
-
-.nav-item ::deep a.active {
-    background-color: #21b711;
-    color: white;
-}
-
-.nav-item ::deep .nav-link:hover {
-    background-color: rgba(255, 140, 26, 0.25);
-    color: white;
-}

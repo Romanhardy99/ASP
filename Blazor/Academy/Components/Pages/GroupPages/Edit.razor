@@ -62,14 +62,14 @@ else
                     <ValidationMessage For="() => Group.learning_days" class="text-danger" />
                 </div>
                 <LearningDays Group="@Group"/>
-                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="submit" class="btn btn-primary">Сохранить</button>
             </EditForm>
         </div>
     </div>
 }
 
 <div>
-    <a href="/groups">Back to List</a>
+    <a href="/groups" class="btn btn-secondary">Назад к списку</a>
 </div>
 
 @code {
