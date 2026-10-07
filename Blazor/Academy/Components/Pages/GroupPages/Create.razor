@@ -1,5 +1,4 @@
 @page "/groups/create"
-@rendermode InteractiveServer
 @using Microsoft.EntityFrameworkCore
 @using Academy.Models
 @inject IDbContextFactory<AcademyContext> DbFactory
@@ -7,25 +6,22 @@
 
 <PageTitle>Create</PageTitle>
 
-<h1>Create</h1>
-
-<h2>Group</h2>
+<h1>Создание группы</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <EditForm method="post" Model="Group" OnValidSubmit="AddGroup" FormName="create" Enhance>
             <DataAnnotationsValidator />
-            <ValidationSummary class="text-danger" role="alert"/>
+            <ValidationSummary class="text-danger" role="alert" />
             <div class="mb-3">
                 <span class="text-danger">*</span>
-                <label for="group_name" class="form-label">group_name:</label> 
-                <InputText id="group_name" @bind-Value="Group.group_name" class="form-control" aria-required="true"/> 
-                <ValidationMessage For="() => Group.group_name" class="text-danger" /> 
-            </div>        
+                <label for="group_name" class="form-label">Название группы:</label>
+                <InputText id="group_name" @bind-Value="Group.group_name" class="form-control" aria-required="true" />
+                <ValidationMessage For="() => Group.group_name" class="text-danger" />
+            </div>
             <div class="mb-3">
                 <span class="text-danger">*</span>
-                <label for="direction" class="form-label">direction:</label> 
-                @* <InputNumber id="direction" @bind-Value="Group.direction" class="form-control" aria-required="true"/>  *@
+                <label for="direction" class="form-label">Направление:</label>
                 <InputSelect @bind-Value="Group.direction" class="form-control">
                     <option selected disabled>--- Выберите направление обучения ---</option>
                     @using (AcademyContext context = DbFactory.CreateDbContext())
@@ -36,31 +32,31 @@
                         }
                     }
                 </InputSelect>
-                <ValidationMessage For="() => Group.direction" class="text-danger" /> 
-            </div>        
+                <ValidationMessage For="() => Group.direction" class="text-danger" />
+            </div>
             <div class="mb-3">
-                <label for="start_date" class="form-label">start_date:</label> 
-                <InputDate id="start_date" @bind-Value="Group.start_date" class="form-control" /> 
-                <ValidationMessage For="() => Group.start_date" class="text-danger" /> 
-            </div>        
+                <label for="start_date" class="form-label">Дата начала:</label>
+                <InputDate id="start_date" @bind-Value="Group.start_date" class="form-control" />
+                <ValidationMessage For="() => Group.start_date" class="text-danger" />
+            </div>
             <div class="mb-3">
-                <label for="start_time" class="form-label">start_time:</label> 
-                <InputDate Type="InputDateType.Time" id="start_time" @bind-Value="Group.start_time" class="form-control" /> 
-                <ValidationMessage For="() => Group.start_time" class="text-danger" /> 
-            </div>        
+                <label for="start_time" class="form-label">Время начала:</label>
+                <InputDate Type="InputDateType.Time" id="start_time" @bind-Value="Group.start_time" class="form-control" />
+                <ValidationMessage For="() => Group.start_time" class="text-danger" />
+            </div>
             <div class="mb-3">
-                <label for="learning_days" class="form-label">learning_days:</label> 
-                <InputNumber id="learning_days" @bind-Value="Group.learning_days" class="form-control" /> 
-                <ValidationMessage For="() => Group.learning_days" class="text-danger" /> 
-            </div>        
-           <LearningDays Group="Group"/>
-            <button type="submit" class="btn btn-primary">Добавить</button>
+                <label for="learning_days" class="form-label">Дни занятий:</label>
+                <InputNumber id="learning_days" @bind-Value="Group.learning_days" class="form-control" />
+                <ValidationMessage For="() => Group.learning_days" class="text-danger" />
+            </div>
+            <LearningDays Group="Group" />
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Добавить</button>
+                <a href="/groups" class="btn btn-secondary">Назад к списку</a>
+            </div>
         </EditForm>
     </div>
-</div>class="btn btn-secondary"
-
-<div>
-    <a href="/groups" class="btn btn-secondary">Назад к списку</a>
 </div>
 
 @code {

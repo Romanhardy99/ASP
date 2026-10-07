@@ -6,27 +6,25 @@
 
 <PageTitle>Create</PageTitle>
 
-<h1>Create</h1>
-
-<h2>Direction</h2>
+<h1>Создание направления</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <EditForm method="post" Model="Direction" OnValidSubmit="AddDirection" FormName="create" Enhance>
             <DataAnnotationsValidator />
-            <ValidationSummary class="text-danger" role="alert"/>
+            <ValidationSummary class="text-danger" role="alert" />
             <div class="mb-3">
-                <label for="direction_name" class="form-label">direction_name:</label> 
-                <InputText id="direction_name" @bind-Value="Direction.direction_name" class="form-control" /> 
-                <ValidationMessage For="() => Direction.direction_name" class="text-danger" /> 
-            </div>        
-            <button type="submit" class="btn btn-primary">Добавить</button>
+                <label for="direction_name" class="form-label">Название направления:</label>
+                <InputText id="direction_name" @bind-Value="Direction.direction_name" class="form-control" />
+                <ValidationMessage For="() => Direction.direction_name" class="text-danger" />
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Добавить</button>
+                <a href="/directions" class="btn btn-secondary">Назад к списку</a>
+            </div>
         </EditForm>
     </div>
-</div>
-
-<div>
-    <a href="/directions" class="btn btn-secondary">Назад к списку</a>
 </div>
 
 @code {

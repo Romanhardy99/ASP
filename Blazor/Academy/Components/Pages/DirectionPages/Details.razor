@@ -6,7 +6,13 @@
 
 <PageTitle>Details</PageTitle>
 
-<h1>Подробнее</h1>
+@if (direction is not null)
+{
+    <SectionContent SectionName="page-actions">
+        <a href="@($"/directions/edit?direction_id={direction.direction_id}")">Редактировать</a>
+        <a href="@($"/directions/delete?direction_id={direction.direction_id}")">Удалить</a>
+    </SectionContent>
+}
 
 <div>
     <h2>Направление</h2>
@@ -15,14 +21,13 @@
     {
         <p><em>Loading...</em></p>
     }
-    else {
+    else
+    {
         <dl class="row">
-            <dt class="col-sm-2">direction_name</dt>
-            <dd class="col-sm-10">@direction.direction_name</dd>
+            <dt class="col-sm-3">Название направления</dt>
+            <dd class="col-sm-9">@direction.direction_name</dd>
         </dl>
         <div>
-            <a href="@($"/directions/edit?direction_id={direction.direction_id}")" class="btn btn-primary">Редактировать</a> |
-            <a href="@($"/directions/delete?direction_id={direction.direction_id}")" class="btn btn-danger">Удалить</a> |
             <a href="@($"/directions")" class="btn btn-secondary">Назад к списку</a>
         </div>
     }

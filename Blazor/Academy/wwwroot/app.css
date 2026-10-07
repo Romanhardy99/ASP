@@ -72,57 +72,76 @@ h1:focus {
     font-weight: 600;
 }
 
-    .academy-table th,
-    .academy-table td {
-        --bs-table-color: white;
-        background-color: transparent;
-        border: 1px solid rgba(255, 255, 255, 0.6);
-    }
+.table-actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
 
-    .academy-table th {
-        background-color: rgba(0, 0, 0, 0.45);
-    }
-
-        .academy-table th,
-        .academy-table th * {
-            color: white !important;
-        }
-
-    .academy-table td {
-        background-color: rgba(0, 0, 0, 0.2);
-    }
-
-    .academy-table tbody tr {
-        transition: background-color 0.2s ease, transform 0.2s ease;
-    }
-
-        .academy-table tbody tr:hover {
-            background-color: rgba(255, 140, 26, 0.25) !important;
-            transform: scale(1.01);
-            cursor: pointer;
-        }
-
-            .academy-table tbody tr:hover td {
-                background-color: transparent;
-            }
-
-    .academy-table a {
-        color: white;
-        font-weight: 600;
+    .table-actions a {
+        color: #ff8c1a !important;
         text-decoration: none;
     }
 
-        .academy-table a:hover {
+        .table-actions a:hover {
             text-decoration: underline;
         }
 
-    .academy-table tr:has(> td:not(:empty)) > td {
-        display: table-cell;
+        .table-actions a.text-danger {
+            color: #ff6b6b !important;
+        }
+
+.academy-table th,
+.academy-table td {
+    --bs-table-color: white;
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.academy-table th {
+    background-color: rgba(0, 0, 0, 0.45);
+}
+
+    .academy-table th,
+    .academy-table th * {
+        color: white !important;
     }
 
-    .academy-table td:empty {
-        display: none;
+.academy-table td {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.academy-table tbody tr {
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+    .academy-table tbody tr:hover {
+        background-color: rgba(255, 140, 26, 0.25) !important;
+        transform: scale(1.01);
+        cursor: pointer;
     }
+
+        .academy-table tbody tr:hover td {
+            background-color: transparent;
+        }
+
+.academy-table a {
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+    .academy-table a:hover {
+        text-decoration: underline;
+    }
+
+.academy-table tr:has(> td:not(:empty)) > td {
+    display: table-cell;
+}
+
+.academy-table td:empty {
+    display: none;
+}
 
 .student-filters {
     display: flex;
@@ -180,6 +199,7 @@ h1:focus {
 h1, h2, h3 {
     color: white;
 }
+
 .btn-secondary {
     background-color: rgba(255, 255, 255, 0.15);
     border-color: rgba(255, 255, 255, 0.3);
@@ -191,3 +211,74 @@ h1, h2, h3 {
         border-color: rgba(255, 255, 255, 0.5);
         color: white;
     }
+
+.form-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+.info-section {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.info-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: 100%;
+    padding: 0.7rem 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 0.5rem;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+    .info-toggle:hover {
+        background: rgba(255, 140, 26, 0.15);
+    }
+
+    .info-toggle .badge-count {
+        background: #ff8c1a;
+        color: #1a2233;
+        font-size: 0.8rem;
+        font-weight: 700;
+        border-radius: 999px;
+        padding: 0.1rem 0.55rem;
+    }
+
+.info-toggle-arrow {
+    margin-left: auto;
+    transition: transform 0.2s ease;
+}
+
+.info-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s ease, padding 0.25s ease;
+}
+
+    .info-panel.open {
+        max-height: 500px;
+        padding-top: 0.9rem;
+    }
+
+.discipline-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.discipline-tag {
+    background: rgba(255, 140, 26, 0.18);
+    border: 1px solid rgba(255, 140, 26, 0.5);
+    color: white;
+    padding: 0.35rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}

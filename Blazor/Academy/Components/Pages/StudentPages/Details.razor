@@ -7,36 +7,44 @@
 
 <PageTitle>Details</PageTitle>
 
-@* <h1>Details</h1> *@
+@if (student is not null)
+{
+    <SectionContent SectionName="page-actions">
+        <a href="@($"/students/edit?stud_id={student.stud_id}")">Редактировать</a>
+    </SectionContent>
+}
 
 <div>
-    @* <h2>Student</h2> *@
-    @* <hr /> *@
     @if (student is null)
     {
         <p><em>Loading...</em></p>
     }
-    else {
-        <div class="controls"> 
-            <h1>@student.FullName</h1>
-            <a href="@($"/students/edit?stud_id={student.stud_id}")" class="btn btn-primary">Редактировать</a>
-        </div>
+    else
+    {
+        <h1>@student.FullName</h1>
         <hr />
         <div class="human-container">
             <dl class="row human-text-fields">
-                <dt class="col-sm-3">Фамилия</dt>     <dd class="col-sm-9">@student.last_name</dd>
-                <dt class="col-sm-3">Имя</dt>    <dd class="col-sm-9">@student.first_name</dd>
-                <dt class="col-sm-3">Отчество</dt>   <dd class="col-sm-9">@student.middle_name</dd>
-                <dt class="col-sm-3">Группа</dt>         <dd class="col-sm-9">@student.Group.group_name</dd>
-                <dt class="col-sm-3">Направление</dt>     <dd class="col-sm-9">@student.Group.Direction.direction_name</dd>
-                <dt class="col-sm-3">Дата рождения</dt>    <dd class="col-sm-9">@student.birth_date</dd>
-                <dt class="col-sm-3">Почта</dt>         <dd class="col-sm-9">@student.email</dd>
-                <dt class="col-sm-3">Телефон</dt>         <dd class="col-sm-9">@student.phone</dd>
+                <dt class="col-sm-3">Фамилия</dt>
+                <dd class="col-sm-9">@student.last_name</dd>
+                <dt class="col-sm-3">Имя</dt>
+                <dd class="col-sm-9">@student.first_name</dd>
+                <dt class="col-sm-3">Отчество</dt>
+                <dd class="col-sm-9">@student.middle_name</dd>
+                <dt class="col-sm-3">Группа</dt>
+                <dd class="col-sm-9">@student.Group.group_name</dd>
+                <dt class="col-sm-3">Направление</dt>
+                <dd class="col-sm-9">@student.Group.Direction.direction_name</dd>
+                <dt class="col-sm-3">Дата рождения</dt>
+                <dd class="col-sm-9">@student.birth_date</dd>
+                <dt class="col-sm-3">Почта</dt>
+                <dd class="col-sm-9">@student.email</dd>
+                <dt class="col-sm-3">Телефон</dt>
+                <dd class="col-sm-9">@student.phone</dd>
             </dl>
             <Photo Human="student" />
         </div>
         <div>
-         @*    <a href="@($"/students/edit?stud_id={student.stud_id}")">Edit</a> | *@
             <a href="@($"/students")" class="btn btn-secondary">Назад к списку</a>
         </div>
     }

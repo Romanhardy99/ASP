@@ -1,7 +1,0 @@
-/* CSS for Create component */
-.form-actions {
-    margin-top: 1.5rem;
-    display: flex;
-    gap: 0.75rem; /* расстояние между кнопками */
-    align-items: center;
-}

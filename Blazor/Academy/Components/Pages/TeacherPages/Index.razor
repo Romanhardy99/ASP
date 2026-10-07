@@ -8,29 +8,28 @@
 
 <PageTitle>Index</PageTitle>
 
+<SectionContent SectionName="page-actions">
+    <a href="teachers/create">Добавить</a>
+</SectionContent>
+
 <h1>Преподаватели</h1>
 
-<p>
-    <a href="teachers/create" class="btn btn-primary">Добавить</a>
-</p>
-
 <QuickGrid Class="academy-table" Items="context.Teachers">
-    <PropertyColumn Property="teacher => teacher.work_since" />
-    <PropertyColumn Property="teacher => teacher.rate" />
-    <PropertyColumn Property="teacher => teacher.last_name" />
-    <PropertyColumn Property="teacher => teacher.first_name" />
-    <PropertyColumn Property="teacher => teacher.middle_name" />
-    <PropertyColumn Property="teacher => teacher.birth_date" />
-    <PropertyColumn Property="teacher => teacher.email" />
-    <PropertyColumn Property="teacher => teacher.phone" />
-    <PropertyColumn Property="teacher => teacher.photo" />
-    <PropertyColumn Property="teacher => teacher.FullName" />
-    <PropertyColumn Property="teacher => teacher.Age" />
+    <TemplateColumn Title="ФИО" Context="teacher" Sortable="true" SortBy="GridSort<Teacher>.ByAscending(t => t.last_name).ThenAscending(t => t.first_name)">
+        <a href="@($"teachers/details?teacher_id={teacher.teacher_id}")">@teacher.FullName</a>
+    </TemplateColumn>
+    <PropertyColumn Property="teacher => teacher.birth_date" Title="Дата рождения" Sortable="true" />
+    <PropertyColumn Property="teacher => teacher.Age" Title="Возраст" Sortable="true" />
+    <PropertyColumn Property="teacher => teacher.work_since" Title="Работает с" Sortable="true" />
+    <PropertyColumn Property="teacher => teacher.rate" Title="Ставка" Sortable="true" />
+    <PropertyColumn Property="teacher => teacher.email" Title="Email" />
+    <PropertyColumn Property="teacher => teacher.phone" Title="Телефон" />
 
-    <TemplateColumn Context="teacher">
-        <a href="@($"teachers/edit?teacher_id={teacher.teacher_id}")" class="btn btn-secondary">Редактировать</a> |
-        <a href="@($"teachers/details?teacher_id={teacher.teacher_id}")" class="btn btn-secondary">Детали</a> |
-        <a href="@($"teachers/delete?teacher_id={teacher.teacher_id}")" class="btn btn-danger">Удалить</a>
+    <TemplateColumn Title="Действия" Context="teacher">
+        <div class="table-actions">
+            <a href="@($"teachers/edit?teacher_id={teacher.teacher_id}")">Редактировать</a>
+            <a href="@($"teachers/delete?teacher_id={teacher.teacher_id}")" class="text-danger">Удалить</a>
+        </div>
     </TemplateColumn>
 </QuickGrid>
 

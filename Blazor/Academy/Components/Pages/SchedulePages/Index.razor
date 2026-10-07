@@ -11,12 +11,12 @@
 <h1>Расписание - выбор группы</h1>
 
 <QuickGrid Class="academy-table" Items="context.Groups.Include(g => g.Direction)">
-    <PropertyColumn Property="group => group.group_name" Title="Группа" Sortable="true"/>
-    <PropertyColumn Property="group => group.Direction.direction_name" Title="Направление"/>
-    <PropertyColumn Property="group => group.start_date" Title="Дата начала"/>
-   
+    <PropertyColumn Property="group => group.group_name" Title="Группа" Sortable="true" />
+    <PropertyColumn Property="group => group.Direction.direction_name" Title="Направление" />
+    <PropertyColumn Property="group => group.start_date" Title="Дата начала" />
+
     <TemplateColumn Title="Действия" Context="group">
-        <a href="@($"schedules/group?group_id={group.group_id}")" class="btn btn-secondary">Подробнее</a> |
+        <a href="@($"schedules/group?group_id={group.group_id}")" class="btn btn-secondary">Подробнее</a>
     </TemplateColumn>
 </QuickGrid>
 

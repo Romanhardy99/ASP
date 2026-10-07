@@ -6,34 +6,40 @@
 
 <PageTitle>Details</PageTitle>
 
+@if (discipline is not null)
+{
+    <SectionContent SectionName="page-actions">
+        <a href="@($"/disciplines/edit?discipline_id={discipline.discipline_id}")">Редактировать</a>
+        <a href="@($"/disciplines/delete?discipline_id={discipline.discipline_id}")">Удалить</a>
+    </SectionContent>
+}
+
 <div>
-    @* <h2>Discipline</h2>
-    <hr /> *@
     @if (discipline is null)
     {
         <p><em>Loading...</em></p>
     }
-    else {
+    else
+    {
         <h2>@discipline.discipline_name</h2>
         <hr />
         <dl class="row">
-            @* <dt class="col-sm-2">Название дисциплины</dt> <dd class="col-sm-10">@discipline.discipline_name</dd> *@
-            <dt class="col-sm-2">Количество занятий</dt><dd class="col-sm-10">@discipline.number_of_lessons</dd>
-          @*   <dt class="col-sm-2">TDR</dt> <dd class="col-sm-10">@discipline.TDR</dd> *@
+            <dt class="col-sm-3">Количество занятий</dt>
+            <dd class="col-sm-9">@discipline.number_of_lessons</dd>
         </dl>
         <div>
             <a href="@($"/disciplines")" class="btn btn-secondary">Назад к списку</a>
         </div>
+
         <h3>Преподаватели (@discipline.TDR.Count):</h3>
-        
         @if (discipline.TDR.Any())
         {
             <ul>
                 @foreach (TeachersDisciplinesRelation tdr in discipline.TDR)
                 {
                     <li>
-                        <a href="@($"/teacher/details?teacher_id={tdr.Teacher.teacher_id}")">
-                            @tdr.Teacher.FullName    
+                        <a href="@($"/teachers/details?teacher_id={tdr.Teacher.teacher_id}")">
+                            @tdr.Teacher.FullName
                         </a>
                     </li>
                 }
@@ -67,24 +73,3 @@
         }
     }
 }
-
-@* @code {
-    private Teacher? teacher;
-
-    [SupplyParameterFromQuery]
-    private int teacher_id { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        using var context = DbFactory.CreateDbContext();
-        teacher = await context.Teachers
-                                .Include(t => t.TDR)
-                                .ThenInclude(tdr => tdr.Discipline)
-                                .FirstOrDefaultAsync(m => m.teacher_id == teacher_id);
-
-        if (teacher is null)
-        {
-            NavigationManager.NotFound();
-        }
-    }
-} *@

@@ -1,5 +1,4 @@
 @page "/directions"
-@rendermode InteractiveServer
 @using Microsoft.AspNetCore.Components.QuickGrid
 @using Microsoft.EntityFrameworkCore
 @using Academy.Models
@@ -9,64 +8,56 @@
 
 <PageTitle>Directions</PageTitle>
 
+<SectionContent SectionName="page-actions">
+    <a href="directions/create">Добавить</a>
+</SectionContent>
+
 <h1>Направление обучения</h1>
 
-<div class="controls">
-    <p>
-        <a href="directions/create" class="btn btn-primary">Добавить</a>
-    </p>
+<div class="direction-filters mb-3">
 
-    <div class="direction-filters mb-3">
+    <div style="max-width: 300px;">
+        <label for="search" class="form-label">
+            Поиск по названию:
+        </label>
 
-        <div style="max-width: 300px;">
-            <label for="search" class="form-label">
-                Поиск по названию:
-            </label>
+        <input type="text"
+               id="search"
+               class="form-control"
+               placeholder="Введите название..."
+               @bind="searchText"
+               @bind:event="oninput" />
+    </div>
 
-            <input type="text"
-                   id="search"
-                   class="form-control"
-                   placeholder="Введите название..."
-                   @bind="searchText"
-                   @bind:event="oninput" />
-        </div>
+    <div style="max-width: 200px;">
+        <label for="pageSize" class="form-label">
+            Направлений на странице:
+        </label>
 
-        <div style="max-width: 200px;">
-            <label for="pageSize" class="form-label">
-                Направлений на странице:
-            </label>
-
-            <input type="number"
-                   id="pageSize"
-                   class="form-control"
-                   value="@pagination.ItemsPerPage"
-                   min="1"
-                   max="100"
-                   @onchange="OnPageSizeChanged" />
-        </div>
+        <input type="number"
+               id="pageSize"
+               class="form-control"
+               value="@pagination.ItemsPerPage"
+               min="1"
+               max="100"
+               @onchange="OnPageSizeChanged" />
     </div>
 </div>
 
-<div>
-    <div class="grid-container">
-        <QuickGrid Class="academy-table" Items="FilteredDirections" Pagination="pagination">
-            <PropertyColumn Property="direction => direction.direction_id"
-                            class="direction-id"
-                            Title="Направление"
-                            Sortable="true" />
-            <PropertyColumn Property="direction => direction.direction_name"
-                            class="direction-name"
-                            Title="Направление"
-                            Sortable="true" />
+<QuickGrid Class="academy-table" Items="FilteredDirections" Pagination="pagination">
+    <PropertyColumn Property="direction => direction.direction_id"
+                    Title="ID"
+                    Sortable="true" />
+    <PropertyColumn Property="direction => direction.direction_name"
+                    Title="Название направления"
+                    Sortable="true" />
 
+    <TemplateColumn Title="Действия" Context="direction">
+        <a href="@($"directions/details?direction_id={direction.direction_id}")">Подробнее</a>
+    </TemplateColumn>
+</QuickGrid>
 
-            <TemplateColumn Context="direction">
-                <a href="@($"directions/details?direction_id={direction.direction_id}")">Details</a> |
-            </TemplateColumn>
-        </QuickGrid>
-    </div>
-    <Paginator State="pagination" />
-</div>
+<Paginator State="pagination" />
 
 @code {
     private AcademyContext context = default!;
