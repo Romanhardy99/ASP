@@ -14,7 +14,7 @@
 else
 {
     <h1>@group.group_name</h1>
-    <p>Направление: @group.Direction.direction_name</p>
+    <p class="page-subtitle">Направление: <strong>@group.Direction.direction_name</strong></p>
     <hr />
 
     <h3>Преподаватели, ведущие дисциплины направления</h3>
@@ -31,31 +31,35 @@ else
                     <th>Преподаватель</th>
                     <th>Работает с</th>
                     <th>Ставка</th>
-                    <th></th>
+                    <th>Действия</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var teacher in teachers)
                 {
                     <tr>
-                        <td>@teacher.FullName</td>
+                        <td>
+                            <a href="@($"/teachers/details?teacher_id={teacher.teacher_id}")">@teacher.FullName</a>
+                        </td>
                         <td>@teacher.work_since</td>
                         <td>@teacher.rate</td>
                         <td>
-                            <a href="@($"schedules/assign?group_id={group.group_id}&teacher_id={teacher.teacher_id}")">
-                                Назначить расписание
-                            </a>
+                            <div class="table-actions">
+                                <a href="@($"schedules/assign?group_id={group.group_id}&teacher_id={teacher.teacher_id}")">
+                                    Назначить расписание
+                                </a>
+                            </div>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
     }
-}
 
-<div>
-    <a href="/schedules" class="btn btn-secondary">Назад к списку групп</a>
-</div>
+    <div class="page-footer-actions">
+        <a href="/schedules" class="btn btn-secondary">Назад к списку групп</a>
+    </div>
+}
 
 @code {
     private AcademyContext context = default!;
@@ -80,13 +84,11 @@ else
             return;
         }
 
-        // Дисциплины, относящиеся к направлению этой группы
         var disciplineIds = await context.DisciplinesDirectionsRelations
             .Where(ddr => ddr.direction == group.direction)
             .Select(ddr => ddr.discipline)
             .ToListAsync();
 
-        // Преподаватели, которые ведут хотя бы одну из этих дисциплин
         teachers = await context.Teachers
             .Where(t => t.TDR.Any(tdr => disciplineIds.Contains(tdr.discipline)))
             .ToListAsync();

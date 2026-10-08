@@ -4,40 +4,61 @@
 @inject IDbContextFactory<AcademyContext> DbFactory
 @inject NavigationManager NavigationManager
 
-<PageTitle>Delete</PageTitle>
+<PageTitle>Удаление дисциплины</PageTitle>
 
-<h1>Delete</h1>
-
-<p>Are you sure you want to delete this?</p>
 <div>
-    <h2>Discipline</h2>
-    <hr />
     @if (discipline is null)
     {
         <p><em>Loading...</em></p>
     }
-    else {
-        <dl class="row">
-            <dt class="col-sm-2">discipline_name</dt>
-            <dd class="col-sm-10">@discipline.discipline_name</dd>
+    else
+    {
+        <h1>Удаление: @discipline.discipline_name</h1>
+
+        @if (lessonCount > 0)
+        {
+            <p class="text-danger">
+                Дисциплину нельзя удалить: по ней в расписании есть занятия (@lessonCount). Удаление стёрло бы историю занятий и посещаемости.
+            </p>
+        }
+        else
+        {
+            <p class="text-danger">
+                Вы уверены, что хотите удалить эту дисциплину?
+                @if (teacherCount > 0 || directionCount > 0)
+                {
+                    <span>Будут удалены её связи с преподавателями и направлениями, сами они останутся.</span>
+                }
+                Это действие нельзя отменить.
+            </p>
+        }
+        <hr />
+
+        <dl class="row human-text-fields">
+            <dt class="col-sm-3">Количество занятий</dt>
+            <dd class="col-sm-9">@discipline.number_of_lessons</dd>
+            <dt class="col-sm-3">Преподавателей</dt>
+            <dd class="col-sm-9">@teacherCount</dd>
+            <dt class="col-sm-3">Направлений</dt>
+            <dd class="col-sm-9">@directionCount</dd>
+            <dt class="col-sm-3">Занятий в расписании</dt>
+            <dd class="col-sm-9">@lessonCount</dd>
         </dl>
-        <dl class="row">
-            <dt class="col-sm-2">number_of_lessons</dt>
-            <dd class="col-sm-10">@discipline.number_of_lessons</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">TDR</dt>
-            <dd class="col-sm-10">@discipline.TDR</dd>
-        </dl>
+
         <EditForm method="post" Model="discipline" OnValidSubmit="DeleteDiscipline" FormName="delete" Enhance>
-            <button type="submit" class="btn btn-danger" disabled="@(discipline is null)">Удалить</button> |
-            <a href="/disciplines" class="btn btn-secondary">Назад к списку</a>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-danger" disabled="@(lessonCount > 0)">Удалить</button>
+                <a href="@($"/disciplines/details?discipline_id={discipline.discipline_id}")" class="btn btn-secondary">Отмена</a>
+            </div>
         </EditForm>
     }
 </div>
 
 @code {
     private Discipline? discipline;
+    private int teacherCount;
+    private int directionCount;
+    private int lessonCount;
 
     [SupplyParameterFromQuery]
     private int discipline_id { get; set; }
@@ -50,13 +71,39 @@
         if (discipline is null)
         {
             NavigationManager.NotFound();
+            return;
         }
+
+        teacherCount = await context.TeachersDisciplinesRelations.CountAsync(tdr => tdr.discipline == discipline_id);
+        directionCount = await context.DisciplinesDirectionsRelations.CountAsync(ddr => ddr.discipline == discipline_id);
+        lessonCount = await context.Schedule.CountAsync(s => s.discipline == discipline_id);
     }
 
     private async Task DeleteDiscipline()
     {
         using var context = DbFactory.CreateDbContext();
-        context.Disciplines.Remove(discipline!);
+
+        // Повторная проверка на сервере
+        if (await context.Schedule.AnyAsync(s => s.discipline == discipline_id))
+        {
+            return;
+        }
+
+        // 1. Связи с преподавателями
+        context.TeachersDisciplinesRelations.RemoveRange(
+            context.TeachersDisciplinesRelations.Where(tdr => tdr.discipline == discipline_id));
+
+        // 2. Связи с направлениями
+        context.DisciplinesDirectionsRelations.RemoveRange(
+            context.DisciplinesDirectionsRelations.Where(ddr => ddr.discipline == discipline_id));
+
+        // 3. Сама дисциплина
+        var toDelete = await context.Disciplines.FindAsync(discipline_id);
+        if (toDelete is not null)
+        {
+            context.Disciplines.Remove(toDelete);
+        }
+
         await context.SaveChangesAsync();
         NavigationManager.NavigateTo("/disciplines");
     }

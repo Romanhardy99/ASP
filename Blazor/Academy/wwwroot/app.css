@@ -1,6 +1,7 @@
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    background-image: url('/academy.png');
+    background-image: url('/neon.png');
+    /*background-image: url('/academy.png');*/
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -8,7 +9,7 @@ html, body {
 }
 
 a, .btn-link {
-    color: #006bb7;
+    color: #ff8c1a;
 }
 
 .btn-primary {
@@ -265,6 +266,7 @@ h1, h2, h3 {
     .info-panel.open {
         max-height: 500px;
         padding-top: 0.9rem;
+        overflow-y: auto;
     }
 
 .discipline-tags {
@@ -281,4 +283,29 @@ h1, h2, h3 {
     border-radius: 999px;
     font-size: 0.9rem;
     font-weight: 500;
+}
+
+.page-subtitle {
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.03em;
+    margin-bottom: 1rem;
+}
+
+    .page-subtitle strong {
+        color: white;
+        font-size: 1.05rem;
+        font-weight: 600;
+        text-transform: none;
+        letter-spacing: normal;
+        margin-left: 0.3rem;
+    }
+
+.page-footer-actions {
+    margin-top: 1.5rem;
+}
+p em {
+    color: rgba(255, 255, 255, 0.6);
 }

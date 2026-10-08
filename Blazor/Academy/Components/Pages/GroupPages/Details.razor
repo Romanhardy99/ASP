@@ -6,30 +6,61 @@
 
 <PageTitle>Details</PageTitle>
 
+@if (group is not null)
+{
+    <SectionContent SectionName="page-actions">
+        <a href="@($"/groups/edit?group_id={group.group_id}")">Редактировать</a>
+        <a href="@($"/groups/delete?group_id={group.group_id}")">Удалить</a>
+    </SectionContent>
+}
+
 <div>
     @if (group is null)
     {
         <p><em>Loading...</em></p>
     }
-    else {
+    else
+    {
         <h1>@group.group_name</h1>
         <hr />
-        <dl class="row">
-            <dt class="col-sm-2">group_name</dt>
-            <dd class="col-sm-10">@group.group_name</dd>
-            <dt class="col-sm-2">direction</dt>
-            <dd class="col-sm-10">@group.direction</dd>
-            <dt class="col-sm-2">start_date</dt>
-            <dd class="col-sm-10">@group.start_date</dd>
-            <dt class="col-sm-2">start_time</dt>
-            <dd class="col-sm-10">@group.start_time</dd>
-            <dt class="col-sm-2">learning_days</dt>
-            <dd class="col-sm-10">@(new Week((int)group.learning_days))</dd>
-           @*  <dt class="col-sm-2">Direction</dt>
-            <dd class="col-sm-10">@group.Direction</dd> *@
+        <dl class="row human-text-fields">
+            <dt class="col-sm-3">Направление</dt>
+            <dd class="col-sm-9">@group.Direction.direction_name</dd>
+            <dt class="col-sm-3">Дата начала</dt>
+            <dd class="col-sm-9">@($"{group.start_date:dd.MM.yyyy}")</dd>
+            <dt class="col-sm-3">Время начала</dt>
+            <dd class="col-sm-9">@($"{group.start_time:HH:mm}")</dd>
+            <dt class="col-sm-3">Дни занятий</dt>
+            <dd class="col-sm-9">@(new Week((int)group.learning_days))</dd>
         </dl>
-        <div>
-            <a href="@($"/groups/edit?group_id={group.group_id}")" class="btn btn-primary">Редактировать</a> |
+
+        <div class="info-section">
+            <button type="button" class="info-toggle" @onclick="ToggleStudents">
+                <span class="bi bi-people"></span>
+                Студенты
+                <span class="badge-count">@students.Count</span>
+                <span class="bi @(studentsOpen ? "bi-chevron-up" : "bi-chevron-down") info-toggle-arrow"></span>
+            </button>
+            <div class="info-panel @(studentsOpen ? "open" : "")">
+                @if (students.Count == 0)
+                {
+                    <p><em>В группе нет студентов</em></p>
+                }
+                else
+                {
+                    <div class="discipline-tags">
+                        @foreach (var student in students)
+                        {
+                            <a class="discipline-tag" href="@($"/students/details?stud_id={student.stud_id}")">
+                                @student.FullName
+                            </a>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="page-footer-actions">
             <a href="@($"/groups")" class="btn btn-secondary">Назад к списку</a>
         </div>
     }
@@ -37,6 +68,8 @@
 
 @code {
     private Group? group;
+    private List<Student> students = new();
+    private bool studentsOpen;
 
     [SupplyParameterFromQuery]
     private int group_id { get; set; }
@@ -44,11 +77,21 @@
     protected override async Task OnInitializedAsync()
     {
         using var context = DbFactory.CreateDbContext();
-        group = await context.Groups.FirstOrDefaultAsync(m => m.group_id == group_id);
+        group = await context.Groups
+                              .Include(g => g.Direction)
+                              .FirstOrDefaultAsync(m => m.group_id == group_id);
 
         if (group is null)
         {
             NavigationManager.NotFound();
+            return;
         }
+
+        students = await context.Students
+                                .Where(s => s.group == group_id)
+                                .OrderBy(s => s.last_name).ThenBy(s => s.first_name)
+                                .ToListAsync();
     }
+
+    private void ToggleStudents() => studentsOpen = !studentsOpen;
 }

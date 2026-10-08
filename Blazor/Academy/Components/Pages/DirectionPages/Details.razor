@@ -15,19 +15,72 @@
 }
 
 <div>
-    <h2>Направление</h2>
-    <hr />
     @if (direction is null)
     {
         <p><em>Loading...</em></p>
     }
     else
     {
-        <dl class="row">
-            <dt class="col-sm-3">Название направления</dt>
-            <dd class="col-sm-9">@direction.direction_name</dd>
+        <h1>@direction.direction_name</h1>
+        <hr />
+        <dl class="row human-text-fields">
+            <dt class="col-sm-3">Групп</dt>
+            <dd class="col-sm-9">@groups.Count</dd>
+            <dt class="col-sm-3">Студентов</dt>
+            <dd class="col-sm-9">@studentCount</dd>
+            <dt class="col-sm-3">Дисциплин</dt>
+            <dd class="col-sm-9">@disciplines.Count</dd>
         </dl>
-        <div>
+
+        <div class="info-section">
+            <button type="button" class="info-toggle" @onclick="ToggleGroups">
+                <span class="bi bi-collection"></span>
+                Группы
+                <span class="badge-count">@groups.Count</span>
+                <span class="bi @(groupsOpen ? "bi-chevron-up" : "bi-chevron-down") info-toggle-arrow"></span>
+            </button>
+            <div class="info-panel @(groupsOpen ? "open" : "")">
+                @if (groups.Count == 0)
+                {
+                    <p><em>Групп на этом направлении нет</em></p>
+                }
+                else
+                {
+                    <div class="discipline-tags">
+                        @foreach (var g in groups)
+                        {
+                            <a class="discipline-tag" href="@($"/groups/details?group_id={g.group_id}")">@g.group_name</a>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="info-section">
+            <button type="button" class="info-toggle" @onclick="ToggleDisciplines">
+                <span class="bi bi-journal-bookmark"></span>
+                Дисциплины
+                <span class="badge-count">@disciplines.Count</span>
+                <span class="bi @(disciplinesOpen ? "bi-chevron-up" : "bi-chevron-down") info-toggle-arrow"></span>
+            </button>
+            <div class="info-panel @(disciplinesOpen ? "open" : "")">
+                @if (disciplines.Count == 0)
+                {
+                    <p><em>Дисциплины не назначены</em></p>
+                }
+                else
+                {
+                    <div class="discipline-tags">
+                        @foreach (var d in disciplines)
+                        {
+                            <a class="discipline-tag" href="@($"/disciplines/details?discipline_id={d.discipline_id}")">@d.discipline_name</a>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="page-footer-actions">
             <a href="@($"/directions")" class="btn btn-secondary">Назад к списку</a>
         </div>
     }
@@ -35,6 +88,11 @@
 
 @code {
     private Direction? direction;
+    private List<Group> groups = new();
+    private List<Discipline> disciplines = new();
+    private int studentCount;
+    private bool groupsOpen;
+    private bool disciplinesOpen;
 
     [SupplyParameterFromQuery]
     private int direction_id { get; set; }
@@ -47,6 +105,27 @@
         if (direction is null)
         {
             NavigationManager.NotFound();
+            return;
         }
+
+        // Группы направления
+        groups = await context.Groups
+                              .Where(g => g.direction == direction_id)
+                              .OrderBy(g => g.group_name)
+                              .ToListAsync();
+
+        // Студенты всех групп направления
+        studentCount = await context.Students
+                                   .CountAsync(s => s.Group.direction == direction_id);
+
+        // Дисциплины направления — через связующую таблицу
+        disciplines = await context.DisciplinesDirectionsRelations
+                                   .Where(ddr => ddr.direction == direction_id)
+                                   .Select(ddr => ddr.Discipline)
+                                   .OrderBy(d => d.discipline_name)
+                                   .ToListAsync();
     }
+
+    private void ToggleGroups() => groupsOpen = !groupsOpen;
+    private void ToggleDisciplines() => disciplinesOpen = !disciplinesOpen;
 }

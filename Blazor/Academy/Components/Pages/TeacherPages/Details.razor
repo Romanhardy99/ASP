@@ -64,6 +64,62 @@
             </div>
         </div>
 
+        <div class="info-section">
+            <button type="button" class="info-toggle" @onclick="ToggleSchedule">
+                <span class="bi bi-calendar-week"></span>
+                Расписание
+                <span class="badge-count">@lessons.Count</span>
+                <span class="bi @(scheduleOpen ? "bi-chevron-up" : "bi-chevron-down") info-toggle-arrow"></span>
+            </button>
+            <div class="info-panel @(scheduleOpen ? "open" : "")">
+                @if (lessons.Count == 0)
+                {
+                    <p><em>Занятия не назначены</em></p>
+                }
+                else
+                {
+                    <table class="academy-table">
+                        <thead>
+                            <tr>
+                                <th>Дата</th>
+                                <th>Время</th>
+                                <th>Группа</th>
+                                <th>Дисциплина</th>
+                                <th>Статус</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var lesson in lessons)
+                            {
+                                <tr>
+                                    <td>@lesson.date?.ToString("dd.MM.yyyy")</td>
+                                    <td>@lesson.time?.ToString(@"hh\:mm")</td>
+                                    <td>@lesson.Group.group_name</td>
+                                    <td>
+                                        <a href="@($"/schedules/lesson?lesson_id={lesson.lesson_id}")">@lesson.Discipline.discipline_name</a>
+                                    </td>
+                                    <td>
+                                        @if (lesson.spent)
+                                        {
+                                            <span>Проведена</span>
+                                        }
+                                        else if (lesson.date < today)
+                                        {
+                                            <span class="text-warning">Не отмечена</span>
+                                        }
+                                        else
+                                        {
+                                            <span>Запланирована</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+
         <div>
             <a href="@($"/teachers")" class="btn btn-secondary">Назад к списку</a>
         </div>
@@ -72,7 +128,10 @@
 
 @code {
     private Teacher? teacher;
+    private List<Schedule> lessons = new();
     private bool disciplinesOpen;
+    private bool scheduleOpen;
+    private readonly DateOnly today = DateOnly.FromDateTime(DateTime.Today);
 
     [SupplyParameterFromQuery]
     private int teacher_id { get; set; }
@@ -88,8 +147,18 @@
         if (teacher is null)
         {
             NavigationManager.NotFound();
+            return;
         }
+
+        // Все пары этого преподавателя во всех группах
+        lessons = await context.Schedule
+                               .Include(s => s.Group)
+                               .Include(s => s.Discipline)
+                               .Where(s => s.teacher == teacher_id)
+                               .OrderBy(s => s.date).ThenBy(s => s.time)
+                               .ToListAsync();
     }
 
     private void ToggleDisciplines() => disciplinesOpen = !disciplinesOpen;
+    private void ToggleSchedule() => scheduleOpen = !scheduleOpen;
 }

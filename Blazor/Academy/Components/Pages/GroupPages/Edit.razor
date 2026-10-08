@@ -1,5 +1,4 @@
 @page "/groups/edit"
-@rendermode InteractiveServer
 @using Microsoft.EntityFrameworkCore
 @using Academy.Models
 @inject IDbContextFactory<AcademyContext> DbFactory
@@ -7,9 +6,7 @@
 
 <PageTitle>Edit</PageTitle>
 
-<h1>Edit</h1>
-
-<h2>Group</h2>
+<h1>Редактирование группы</h1>
 <hr />
 @if (Group is null)
 {
@@ -21,56 +18,53 @@ else
         <div class="col-md-4">
             <EditForm method="post" Model="Group" OnValidSubmit="UpdateGroup" FormName="edit" Enhance>
                 <DataAnnotationsValidator />
-                <ValidationSummary role="alert"/>
+                <ValidationSummary role="alert" />
                 <input type="hidden" name="Group.group_id" value="@Group.group_id" />
                 <div class="mb-3">
-                <span class="text-danger">*</span>
-                    <label for="group_name" class="form-label">group_name:</label>
-                    <InputText id="group_name" @bind-Value="Group.group_name" class="form-control" aria-required="true"/>
+                    <span class="text-danger">*</span>
+                    <label for="group_name" class="form-label">Название группы:</label>
+                    <InputText id="group_name" @bind-Value="Group.group_name" class="form-control" aria-required="true" />
                     <ValidationMessage For="() => Group.group_name" class="text-danger" />
                 </div>
                 <div class="mb-3">
-                <span class="text-danger">*</span>
-                    <label for="direction" class="form-label">direction:</label>
-                   @*  <InputNumber id="direction" @bind-Value="Group.direction" class="form-control" aria-required="true"/> *@
-                   
-                   <InputSelect @bind-Value="Group.direction" class="form-control">
-                        @using(AcademyContext context = DbFactory.CreateDbContext())
+                    <span class="text-danger">*</span>
+                    <label for="direction" class="form-label">Направление:</label>
+                    <InputSelect @bind-Value="Group.direction" class="form-control">
+                        @using (AcademyContext context = DbFactory.CreateDbContext())
                         {
-                            @foreach(Direction direction in context.Directions)
+                            @foreach (Direction direction in context.Directions)
                             {
                                 <option value="@direction.direction_id">@direction.direction_name</option>
                             }
                         }
-                   </InputSelect>
-                        
+                    </InputSelect>
                     <ValidationMessage For="() => Group.direction" class="text-danger" />
                 </div>
                 <div class="mb-3">
-                    <label for="start_date" class="form-label">start_date:</label>
+                    <label for="start_date" class="form-label">Дата начала:</label>
                     <InputDate id="start_date" @bind-Value="Group.start_date" class="form-control" />
                     <ValidationMessage For="() => Group.start_date" class="text-danger" />
                 </div>
                 <div class="mb-3">
-                    <label for="start_time" class="form-label">start_time:</label>
+                    <label for="start_time" class="form-label">Время начала:</label>
                     <InputDate Type="InputDateType.Time" id="start_time" @bind-Value="Group.start_time" class="form-control" />
                     <ValidationMessage For="() => Group.start_time" class="text-danger" />
                 </div>
                 <div class="mb-3">
-                    <label for="learning_days" class="form-label">learning_days:</label>
+                    <label for="learning_days" class="form-label">Дни занятий:</label>
                     <InputNumber id="learning_days" @bind-Value="Group.learning_days" class="form-control" />
                     <ValidationMessage For="() => Group.learning_days" class="text-danger" />
                 </div>
-                <LearningDays Group="@Group"/>
-                <button type="submit" class="btn btn-primary">Сохранить</button>
+                <LearningDays Group="@Group" />
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <a href="/groups" class="btn btn-secondary">Назад к списку</a>
+                </div>
             </EditForm>
         </div>
     </div>
 }
-
-<div>
-    <a href="/groups" class="btn btn-secondary">Назад к списку</a>
-</div>
 
 @code {
     [SupplyParameterFromQuery]

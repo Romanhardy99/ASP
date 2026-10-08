@@ -4,72 +4,73 @@
 @inject IDbContextFactory<AcademyContext> DbFactory
 @inject NavigationManager NavigationManager
 
-<PageTitle>Delete</PageTitle>
+<PageTitle>Удаление преподавателя</PageTitle>
 
-<h1>Удалить</h1>
-
-<p>Вы уверены, что хотите удалить этого преподавателя?</p>
 <div>
-    <h2>Teacher</h2>
-    <hr />
     @if (teacher is null)
     {
         <p><em>Loading...</em></p>
     }
-    else {
-        <dl class="row">
-            <dt class="col-sm-2">work_since</dt>
-            <dd class="col-sm-10">@teacher.work_since</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">rate</dt>
-            <dd class="col-sm-10">@teacher.rate</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">last_name</dt>
-            <dd class="col-sm-10">@teacher.last_name</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">first_name</dt>
-            <dd class="col-sm-10">@teacher.first_name</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">middle_name</dt>
-            <dd class="col-sm-10">@teacher.middle_name</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">birth_date</dt>
-            <dd class="col-sm-10">@teacher.birth_date</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">email</dt>
-            <dd class="col-sm-10">@teacher.email</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">phone</dt>
-            <dd class="col-sm-10">@teacher.phone</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">photo</dt>
-            <dd class="col-sm-10">@teacher.photo</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">FullName</dt>
-            <dd class="col-sm-10">@teacher.FullName</dd>
-        </dl>
-        <dl class="row">
-            <dt class="col-sm-2">Age</dt>
-            <dd class="col-sm-10">@teacher.Age</dd>
-        </dl>
+    else
+    {
+        <h1>Удаление: @teacher.FullName</h1>
+
+        @if (lessonCount > 0)
+        {
+            <p class="text-danger">
+                Преподавателя нельзя удалить: у него в расписании есть занятия (@lessonCount). Удаление стёрло бы историю занятий и посещаемости.
+            </p>
+        }
+        else
+        {
+            <p class="text-danger">
+                Вы уверены, что хотите удалить этого преподавателя?
+                @if (disciplineCount > 0)
+                {
+                    <span>Будут удалены его связи с дисциплинами (@disciplineCount), сами дисциплины останутся.</span>
+                }
+                Это действие нельзя отменить.
+            </p>
+        }
+        <hr />
+
+        <div class="human-container">
+            <dl class="row human-text-fields">
+                <dt class="col-sm-3">Фамилия</dt>
+                <dd class="col-sm-9">@teacher.last_name</dd>
+                <dt class="col-sm-3">Имя</dt>
+                <dd class="col-sm-9">@teacher.first_name</dd>
+                <dt class="col-sm-3">Отчество</dt>
+                <dd class="col-sm-9">@teacher.middle_name</dd>
+                <dt class="col-sm-3">Дата рождения</dt>
+                <dd class="col-sm-9">@teacher.birth_date</dd>
+                <dt class="col-sm-3">Почта</dt>
+                <dd class="col-sm-9">@teacher.email</dd>
+                <dt class="col-sm-3">Телефон</dt>
+                <dd class="col-sm-9">@teacher.phone</dd>
+                <dt class="col-sm-3">Работает с</dt>
+                <dd class="col-sm-9">@teacher.work_since</dd>
+                <dt class="col-sm-3">Дисциплин</dt>
+                <dd class="col-sm-9">@disciplineCount</dd>
+                <dt class="col-sm-3">Занятий в расписании</dt>
+                <dd class="col-sm-9">@lessonCount</dd>
+            </dl>
+            <Photo Human="teacher" />
+        </div>
+
         <EditForm method="post" Model="teacher" OnValidSubmit="DeleteTeacher" FormName="delete" Enhance>
-            <button type="submit" class="btn btn-danger" disabled="@(teacher is null)">Удалить</button> |
-            <a href="/teachers" class="btn btn-secondary">Назад к списку</a>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-danger" disabled="@(lessonCount > 0)">Удалить</button>
+                <a href="@($"/teachers/details?teacher_id={teacher.teacher_id}")" class="btn btn-secondary">Отмена</a>
+            </div>
         </EditForm>
     }
 </div>
 
 @code {
     private Teacher? teacher;
+    private int disciplineCount;
+    private int lessonCount;
 
     [SupplyParameterFromQuery]
     private int teacher_id { get; set; }
@@ -82,13 +83,34 @@
         if (teacher is null)
         {
             NavigationManager.NotFound();
+            return;
         }
+
+        disciplineCount = await context.TeachersDisciplinesRelations.CountAsync(tdr => tdr.teacher == teacher_id);
+        lessonCount = await context.Schedule.CountAsync(s => s.teacher == teacher_id);
     }
 
     private async Task DeleteTeacher()
     {
         using var context = DbFactory.CreateDbContext();
-        context.Teachers.Remove(teacher!);
+
+        // Повторная проверка на сервере
+        if (await context.Schedule.AnyAsync(s => s.teacher == teacher_id))
+        {
+            return;
+        }
+
+        // 1. Связи преподавателя с дисциплинами
+        context.TeachersDisciplinesRelations.RemoveRange(
+            context.TeachersDisciplinesRelations.Where(tdr => tdr.teacher == teacher_id));
+
+        // 2. Сам преподаватель
+        var toDelete = await context.Teachers.FindAsync(teacher_id);
+        if (toDelete is not null)
+        {
+            context.Teachers.Remove(toDelete);
+        }
+
         await context.SaveChangesAsync();
         NavigationManager.NavigateTo("/teachers");
     }

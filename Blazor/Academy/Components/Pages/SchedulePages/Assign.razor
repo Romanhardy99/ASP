@@ -38,7 +38,9 @@ else
                 @foreach (var lesson in existingLessons)
                 {
                     <tr>
-                        <td>@lesson.Discipline?.discipline_name</td>
+                        <td>
+                            <a href="@($"/schedules/lesson?lesson_id={lesson.lesson_id}")">@lesson.Discipline?.discipline_name</a>
+                        </td>
                         <td>@lesson.date</td>
                         <td>@lesson.time</td>
                         <td>@(lesson.spent ? "Да" : "Нет")</td>
@@ -83,15 +85,14 @@ else
                     <label for="spent" class="form-check-label">Занятие проведено</label>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Сохранить</button>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <a href="@($"schedules/group?group_id={group_id}")" class="btn btn-secondary">Назад к списку преподавателей</a>
+                </div>
             </EditForm>
         </div>
     </div>
 }
-
-<div>
-    <a href="@($"schedules/group?group_id={group_id}")" class="btn btn-secondary">Назад к списку преподавателей</a>
-</div>
 
 @code {
     private AcademyContext context = default!;

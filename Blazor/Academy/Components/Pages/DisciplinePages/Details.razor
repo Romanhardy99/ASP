@@ -21,39 +21,48 @@
     }
     else
     {
-        <h2>@discipline.discipline_name</h2>
+        <h1>@discipline.discipline_name</h1>
         <hr />
-        <dl class="row">
+        <dl class="row human-text-fields">
             <dt class="col-sm-3">Количество занятий</dt>
             <dd class="col-sm-9">@discipline.number_of_lessons</dd>
         </dl>
+
+        <div class="info-section">
+            <button type="button" class="info-toggle" @onclick="ToggleTeachers">
+                <span class="bi bi-person-badge"></span>
+                Преподаватели
+                <span class="badge-count">@discipline.TDR.Count</span>
+                <span class="bi @(teachersOpen ? "bi-chevron-up" : "bi-chevron-down") info-toggle-arrow"></span>
+            </button>
+            <div class="info-panel @(teachersOpen ? "open" : "")">
+                @if (discipline.TDR.Any())
+                {
+                    <div class="discipline-tags">
+                        @foreach (TeachersDisciplinesRelation tdr in discipline.TDR)
+                        {
+                            <a class="discipline-tag" href="@($"/teachers/details?teacher_id={tdr.Teacher.teacher_id}")">
+                                @tdr.Teacher.FullName
+                            </a>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p><em>Преподаватели не назначены</em></p>
+                }
+            </div>
+        </div>
+
         <div>
             <a href="@($"/disciplines")" class="btn btn-secondary">Назад к списку</a>
         </div>
-
-        <h3>Преподаватели (@discipline.TDR.Count):</h3>
-        @if (discipline.TDR.Any())
-        {
-            <ul>
-                @foreach (TeachersDisciplinesRelation tdr in discipline.TDR)
-                {
-                    <li>
-                        <a href="@($"/teachers/details?teacher_id={tdr.Teacher.teacher_id}")">
-                            @tdr.Teacher.FullName
-                        </a>
-                    </li>
-                }
-            </ul>
-        }
-        else
-        {
-            <p><em>Преподаватели не назначены</em></p>
-        }
     }
 </div>
 
 @code {
     private Discipline? discipline;
+    private bool teachersOpen;
 
     [SupplyParameterFromQuery]
     private int discipline_id { get; set; }
@@ -72,4 +81,6 @@
             NavigationManager.NotFound();
         }
     }
+
+    private void ToggleTeachers() => teachersOpen = !teachersOpen;
 }

@@ -1,0 +1,160 @@
+﻿@page "/schedules/lesson"
+@using Microsoft.EntityFrameworkCore
+@using Academy.Models
+@inject IDbContextFactory<AcademyContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Пара</PageTitle>
+
+@if (lesson is null)
+{
+    <p><em>Загрузка...</em></p>
+}
+else
+{
+    <h1>@lesson.Discipline.discipline_name</h1>
+    <hr />
+    <dl class="row human-text-fields">
+        <dt class="col-sm-3">Группа</dt>
+        <dd class="col-sm-9">@lesson.Group.group_name</dd>
+        <dt class="col-sm-3">Преподаватель</dt>
+        <dd class="col-sm-9">@lesson.Teacher.FullName</dd>
+        <dt class="col-sm-3">Дата</dt>
+        <dd class="col-sm-9">@lesson.date?.ToString("dd.MM.yyyy")</dd>
+        <dt class="col-sm-3">Время</dt>
+        <dd class="col-sm-9">@lesson.time?.ToString(@"hh\:mm")</dd>
+    </dl>
+
+    <div class="form-check mt-3 mb-4">
+        <input type="checkbox" id="spent" class="form-check-input" @bind="spent" />
+        <label for="spent" class="form-check-label">Пара проведена</label>
+    </div>
+
+    <h3>Посещаемость (@PresentCount из @students.Count)</h3>
+
+    @if (students.Count == 0)
+    {
+        <p><em>В группе нет студентов</em></p>
+    }
+    else
+    {
+        <div class="form-actions mt-0 mb-3">
+            <button type="button" class="btn btn-secondary btn-sm" disabled="@(!spent)" @onclick="() => SetAll(true)">Отметить всех</button>
+            <button type="button" class="btn btn-secondary btn-sm" disabled="@(!spent)" @onclick="() => SetAll(false)">Снять всех</button>
+        </div>
+
+        <table class="academy-table">
+            <thead>
+                <tr>
+                    <th>Студент</th>
+                    <th>Присутствует</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var student in students)
+                {
+                    <tr>
+                        <td>@student.FullName</td>
+                        <td>
+                            <input type="checkbox" class="form-check-input"
+                                   checked="@presence[student.stud_id]"
+                                   disabled="@(!spent)"
+                                   @onchange="e => presence[student.stud_id] = (bool)e.Value!" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <div class="form-actions">
+        <button type="button" class="btn btn-primary" @onclick="Save">Сохранить</button>
+        <a href="@($"/schedules/assign?group_id={lesson.group}&teacher_id={lesson.teacher}")" class="btn btn-secondary">Назад к расписанию</a>
+        @if (message is not null)
+        {
+            <span class="text-success">@message</span>
+        }
+    </div>
+}
+
+@code {
+    [SupplyParameterFromQuery]
+    private long lesson_id { get; set; }
+
+    private Schedule? lesson;
+    private List<Student> students = new();
+    private Dictionary<int, bool> presence = new();
+    private bool spent;
+    private string? message;
+
+    private int PresentCount => presence.Values.Count(p => p);
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+
+        lesson = await context.Schedule
+            .Include(s => s.Group)
+            .Include(s => s.Discipline)
+            .Include(s => s.Teacher)
+            .FirstOrDefaultAsync(s => s.lesson_id == lesson_id);
+
+        if (lesson is null)
+        {
+            NavigationManager.NotFound();
+            return;
+        }
+
+        spent = lesson.spent;
+
+        // Студенты группы, у которой стоит эта пара
+        students = await context.Students
+            .Where(s => s.group == lesson.group)
+            .OrderBy(s => s.last_name).ThenBy(s => s.first_name)
+            .ToListAsync();
+
+        // Уже сохранённые отметки по этой паре
+        var existing = await context.Attendances
+            .Where(a => a.lesson == lesson_id)
+            .ToDictionaryAsync(a => a.student, a => a.present);
+
+        presence = students.ToDictionary(
+            s => s.stud_id,
+            s => existing.TryGetValue(s.stud_id, out var p) && p);
+    }
+
+    private void SetAll(bool value)
+    {
+        foreach (var key in presence.Keys.ToList())
+            presence[key] = value;
+    }
+
+    private async Task Save()
+    {
+        using var context = DbFactory.CreateDbContext();
+
+        var dbLesson = await context.Schedule.FirstAsync(s => s.lesson_id == lesson_id);
+        dbLesson.spent = spent;
+
+        var existing = await context.Attendances
+            .Where(a => a.lesson == lesson_id)
+            .ToDictionaryAsync(a => a.student);
+
+        foreach (var (studentId, present) in presence)
+        {
+            if (existing.TryGetValue(studentId, out var record))
+                record.present = present;      // отметка уже была: обновляем
+            else
+                context.Attendances.Add(new Attendance
+                {
+                    student = studentId,
+                    lesson = lesson_id,
+                    present = present
+                });                            // отметки не было: создаём
+        }
+
+        await context.SaveChangesAsync();
+        lesson!.spent = spent;
+        message = "Сохранено";
+    }
+}
