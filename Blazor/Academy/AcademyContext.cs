@@ -15,4 +15,6 @@ public class AcademyContext : DbContext
     public DbSet<Academy.Models.TeachersDisciplinesRelation> TeachersDisciplinesRelations { get; set; } = default!;
     public DbSet<Academy.Models.DisciplinesDirectionsRelation> DisciplinesDirectionsRelations { get; set; } = default!;
     public DbSet<Academy.Models.Attendance> Attendances { get; set; } = default!;
+    public DbSet<Academy.Models.ScheduleView> ScheduleViews { get; set; } = default!;
+
 }

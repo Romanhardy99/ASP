@@ -1,0 +1,84 @@
+﻿@page "/schedules/all"
+@using Microsoft.EntityFrameworkCore
+@using Academy.Models
+@inject IDbContextFactory<AcademyContext> DbFactory
+
+<PageTitle>Общее расписание</PageTitle>
+
+<h1>Общее расписание</h1>
+<p class="page-subtitle">Данные загружаются хранимой процедурой <strong>sp_SelectShedule</strong></p>
+<hr />
+
+@if (rows is null)
+{
+    <p><em>Загрузка...</em></p>
+}
+else
+{
+    <div class="student-filters mb-3">
+        <div style="max-width: 300px;">
+            <label for="groupFilter" class="form-label">Группа:</label>
+            <select id="groupFilter" class="form-control" @bind="groupFilter">
+                <option value="">Все группы</option>
+                @foreach (var g in rows.Select(r => r.GroupName.Trim()).Distinct().OrderBy(g => g))
+                {
+                    <option value="@g">@g</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    @if (!Filtered.Any())
+    {
+        <p><em>Занятий нет</em></p>
+    }
+    else
+    {
+        <table class="academy-table">
+            <thead>
+                <tr>
+                    <th>Группа</th>
+                    <th>Дисциплина</th>
+                    <th>Преподаватель</th>
+                    <th>Дата</th>
+                    <th>День недели</th>
+                    <th>Время</th>
+                    <th>Статус</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Filtered)
+                {
+                    <tr>
+                        <td>@r.GroupName</td>
+                        <td>@r.DisciplineName</td>
+                        <td>@r.TeacherName</td>
+                        <td>@r.Date?.ToString("dd.MM.yyyy")</td>
+                        <td>@r.DayOfWeek</td>
+                        <td>@r.Time?.ToString(@"hh\:mm")</td>
+                        <td>@r.Status</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+
+@code {
+    private List<ScheduleView>? rows;
+    private string groupFilter = "";
+
+    // Фильтр по группе — в памяти: результат хранимой процедуры
+    // нельзя дополнить в SQL через Where
+    private IEnumerable<ScheduleView> Filtered =>
+        rows!.Where(r => groupFilter == "" || r.GroupName.Trim() == groupFilter)
+             .OrderBy(r => r.Date).ThenBy(r => r.Time);
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        rows = await context.ScheduleViews
+                            .FromSqlRaw("EXEC dbo.sp_SelectShedule")
+                            .ToListAsync();
+    }
+}
