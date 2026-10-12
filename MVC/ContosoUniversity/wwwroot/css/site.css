@@ -1,37 +1,253 @@
+/* ===== Строгий стиль в духе GitHub ===== */
+
+:root {
+    --gh-text: #1f2328;
+    --gh-muted: #59636e;
+    --gh-border: #d1d9e0;
+    --gh-border-soft: #eff2f5;
+    --gh-bg-subtle: #f6f8fa;
+    --gh-header: #24292f;
+    --gh-link: #0969da;
+    --gh-link-hover: #0550ae;
+    --gh-green: #1f883d;
+    --gh-green-hover: #1a7f37;
+    --gh-red: #cf222e;
+}
+
 html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    font-size: 14px;
 }
 
 body {
-    margin-bottom: 60px;
-    background-color: #323232;
-    color: aliceblue;
-    padding: 0px;
+    margin: 0;
+    font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+    color: var(--gh-text);
+    background: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+a {
+    color: var(--gh-link);
+    text-decoration: none;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+a:hover {
+    color: var(--gh-link-hover);
+    text-decoration: underline;
 }
-.bg-white {
-    background-color: #808080 !important;
+
+/* ----- Шапка ----- */
+.gh-header {
+    background: var(--gh-header);
+    padding: 14px 24px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 24px;
+}
+
+.gh-brand {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.gh-brand:hover {
+    color: #ffffff;
+    text-decoration: none;
+    opacity: .85;
+}
+
+.gh-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.gh-nav-link {
+    color: #ffffff;
+    opacity: .75;
+}
+
+.gh-nav-link:hover {
+    color: #ffffff;
+    opacity: 1;
+    text-decoration: none;
+}
+
+.gh-nav-link.active {
+    opacity: 1;
+    font-weight: 600;
+}
+
+/* ----- Контент ----- */
+.gh-main {
+    flex: 1;
+    width: 100%;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 32px 24px;
+    box-sizing: border-box;
+}
+
+.gh-footer {
+    border-top: 1px solid var(--gh-border);
+    color: var(--gh-muted);
+    font-size: 12px;
+    text-align: center;
+    padding: 16px;
+}
+
+/* ----- Заголовок страницы ----- */
+.gh-page-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--gh-border);
+    margin-bottom: 24px;
+}
+
+.gh-page-header h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.gh-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.gh-counter {
+    background: var(--gh-border-soft);
+    border-radius: 999px;
+    padding: 2px 10px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* ----- Кнопки ----- */
+.gh-btn {
+    display: inline-block;
+    padding: 7px 14px;
+    border: 1px solid var(--gh-border);
+    border-radius: 6px;
+    background: var(--gh-bg-subtle);
+    color: var(--gh-text);
+    font: inherit;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.gh-btn:hover {
+    background: #eef1f4;
+    color: var(--gh-text);
+    text-decoration: none;
+}
+
+.gh-btn-primary {
+    background: var(--gh-green);
+    border-color: rgba(31, 35, 40, .15);
+    color: #ffffff;
+    padding: 8px 16px;
+}
+
+.gh-btn-primary:hover {
+    background: var(--gh-green-hover);
+    color: #ffffff;
+}
+
+/* ----- Поиск ----- */
+.gh-search {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.gh-search input {
+    flex: 1 1 280px;
+    padding: 7px 12px;
+    border: 1px solid var(--gh-border);
+    border-radius: 6px;
+    font: inherit;
+    background: var(--gh-bg-subtle);
+}
+
+.gh-search input:focus {
+    outline: none;
+    border-color: var(--gh-link);
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(9, 105, 218, .2);
+}
+
+/* ----- Таблица ----- */
+.gh-table-box {
+    border: 1px solid var(--gh-border);
+    border-radius: 6px;
+    overflow-x: auto;
+}
+
+.gh-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.gh-table th {
+    background: var(--gh-bg-subtle);
+    text-align: left;
+    font-weight: 600;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--gh-border);
+}
+
+.gh-table td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--gh-border-soft);
+}
+
+.gh-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.gh-table tbody tr:hover {
+    background: var(--gh-bg-subtle);
+}
+
+.gh-strong {
+    font-weight: 500;
+}
+
+.gh-mono {
+    color: var(--gh-muted);
+    font-family: ui-monospace, Consolas, monospace;
+    font-size: 13px;
+}
+
+.gh-actions {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.gh-danger {
+    color: var(--gh-red);
+}
+
+.gh-danger:hover {
+    color: #a40e26;
+}
+
+.gh-empty {
+    text-align: center;
+    color: var(--gh-muted);
+    padding: 32px 16px;
 }

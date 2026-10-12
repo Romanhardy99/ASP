@@ -1,53 +1,53 @@
 @model IEnumerable<ContosoUniversity.Models.Student>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Студенты";
 }
 
-<h1>Index</h1>
+<div class="gh-page-header">
+    <div class="gh-title">
+        <h1>Студенты</h1>
+        <span class="gh-counter">@Model.Count()</span>
+    </div>
+    <a asp-action="Create" class="gh-btn gh-btn-primary">Добавить студента</a>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EnrollmentDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Enrollments)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(model => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.EnrollmentDate)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Enrollments)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<form asp-action="Index" method="get" class="gh-search">
+    <input type="search" name="searchString" value="@ViewData["CurrentFilter"]"
+           placeholder="Поиск по фамилии…" aria-label="Поиск по фамилии" />
+    <button type="submit" class="gh-btn">Найти</button>
+</form>
+
+<div class="gh-table-box">
+    <table class="gh-table">
+        <thead>
+            <tr>
+                <th>Фамилия</th>
+                <th>Имя</th>
+                <th>Дата зачисления</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="4" class="gh-empty">Студенты не найдены</td>
+                </tr>
+            }
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="gh-strong">@item.LastName</td>
+                    <td>@item.FirstName</td>
+                    <td class="gh-mono">@item.EnrollmentDate.ToString("dd.MM.yyyy")</td>
+                    <td class="gh-actions">
+                        <a asp-action="Edit" asp-route-id="@item.ID">Изменить</a> ·
+                        <a asp-action="Details" asp-route-id="@item.ID">Подробнее</a> ·
+                        <a asp-action="Delete" asp-route-id="@item.ID" class="gh-danger">Удалить</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
