@@ -1,50 +1,52 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+@{
+    // Текущий контроллер — чтобы подсветить активный пункт меню
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+    var action = ViewContext.RouteData.Values["action"]?.ToString();
+    string Active(string name, string? act = null) =>
+        controller == name && (act == null || action == act) ? "gh-nav-link active" : "gh-nav-link";
+}
+<!DOCTYPE html>
+<html lang="ru">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ContosoUniversity</title>
+    <title>@ViewData["Title"] — Contoso University</title>
     <script type="importmap"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ContosoUniversity.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ContosoUniversity</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Students" asp-action="Index">Students</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+    <header class="gh-header">
+        <a class="gh-brand" asp-controller="Home" asp-action="Index">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M2 9l10-5 10 5-10 5z"></path>
+                <path d="M6 11v5c3 2 9 2 12 0v-5"></path>
+            </svg>
+            Contoso University
+        </a>
+        <nav class="gh-nav">
+            <a class="@Active("Home", "Index")" asp-controller="Home" asp-action="Index">Главная</a>
+            <a class="@Active("Students")" asp-controller="Students" asp-action="Index">Студенты</a>
+            <a class="@Active("Home", "Privacy")" asp-controller="Home" asp-action="Privacy">Конфиденциальность</a>
+            @* Когда появятся контроллеры, добавьте пункты так же:
+            <a class="@Active("Courses")" asp-controller="Courses" asp-action="Index">Курсы</a> *@
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - ContosoUniversity - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
+    <main class="gh-main">
+        @RenderBody()
+    </main>
+
+    <footer class="gh-footer">
+        &copy; @DateTime.Now.Year Contoso University · <a asp-controller="Home" asp-action="Privacy">Конфиденциальность</a>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
