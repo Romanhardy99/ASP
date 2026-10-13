@@ -18,7 +18,7 @@ public class StudentsController : Controller
 
         ViewData["CurrentFilter"] = searchString;
 
-        var students = _context.Student.AsQueryable();
+        var students = _context.Students.AsQueryable();
         if (!string.IsNullOrEmpty(searchString))
         {
             students = students.Where(s => s.LastName.Contains(searchString)
@@ -36,7 +36,7 @@ public class StudentsController : Controller
             return NotFound();
         }
 
-        var student = await _context.Student
+        var student = await _context.Students
             .FirstOrDefaultAsync(m => m.ID == id);
         if (student == null)
         {
@@ -76,7 +76,7 @@ public class StudentsController : Controller
             return NotFound();
         }
 
-        var student = await _context.Student.FindAsync(id);
+        var student = await _context.Students.FindAsync(id);
         if (student == null)
         {
             return NotFound();
@@ -127,7 +127,7 @@ public class StudentsController : Controller
             return NotFound();
         }
 
-        var student = await _context.Student
+        var student = await _context.Students
             .FirstOrDefaultAsync(m => m.ID == id);
         if (student == null)
         {
@@ -142,10 +142,10 @@ public class StudentsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int? id)
     {
-        var student = await _context.Student.FindAsync(id);
+        var student = await _context.Students.FindAsync(id);
         if (student != null)
         {
-            _context.Student.Remove(student);
+            _context.Students.Remove(student);
         }
 
         await _context.SaveChangesAsync();
@@ -154,6 +154,6 @@ public class StudentsController : Controller
 
     private bool StudentExists(int? id)
     {
-        return _context.Student.Any(e => e.ID == id);
+        return _context.Students.Any(e => e.ID == id);
     }
 }
