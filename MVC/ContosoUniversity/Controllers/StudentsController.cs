@@ -13,19 +13,31 @@ public class StudentsController : Controller
     }
 
     // GET: STUDENTS
-    public async Task<IActionResult> Index(string searchString)    
+    public async Task<IActionResult> Index(string sortOrder)    
     {
+        ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+        ViewData["DateSortParam"] = sortOrder == "date_asc" ? "date_desc" : "date_asc";
 
-        ViewData["CurrentFilter"] = searchString;
+        IQueryable<Student> students = from student in _context.Students select student;
 
-        var students = _context.Students.AsQueryable();
-        if (!string.IsNullOrEmpty(searchString))
+        switch (sortOrder)
         {
-            students = students.Where(s => s.LastName.Contains(searchString)
-                                        || s.FirstName.Contains(searchString));
+            case "name_desc": students = students.OrderByDescending(s => s.LastName); break;
+            case "date_desc": students = students.OrderByDescending(s => s.EnrollmentDate); break;
+            case "date_asc":  students = students.OrderBy(s => s.EnrollmentDate); break;
+            default:          students = students.OrderBy(s => s.LastName); break;
         }
 
-        return View(await students.OrderBy(s => s.LastName).ToListAsync());
+        //ViewData["CurrentFilter"] = searchString;
+
+        //var students = _context.Students.AsQueryable();
+        //if (!string.IsNullOrEmpty(searchString))
+        //{
+        //    students = students.Where(s => s.LastName.Contains(searchString)
+        //                                || s.FirstName.Contains(searchString));
+        //}
+        //return View(await students.OrderBy(s => s.LastName).ToListAsync());
+        return View(await students.ToListAsync());
     }
 
     // GET: STUDENTS/Details/5
