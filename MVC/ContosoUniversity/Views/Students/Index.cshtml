@@ -29,7 +29,10 @@
         <thead>
             <tr>
                 <th>
-                    <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParam"]">
+                    <a  asp-action="Index" 
+                        asp-route-sortOrder="@ViewData["NameSortParam"]" 
+                        asp-route-searchString="@ViewData["CurrentFilter"]"
+                    >
                         @Html.DisplayNameFor(model => model.LastName)
                     </a>
                 </th>
@@ -37,7 +40,10 @@
                     @Html.DisplayNameFor(model => model.FirstName)
                 </th>
                 <th>
-                    <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]">
+                    <a  asp-action="Index"  
+                        asp-route-sortOrder="@ViewData["DateSortParam"]"
+                        asp-route-searchString="@ViewData["CurrentFilter"]"
+                    >
                         @Html.DisplayNameFor(model => model.EnrollmentDate)
                     </a>
                 </th>
