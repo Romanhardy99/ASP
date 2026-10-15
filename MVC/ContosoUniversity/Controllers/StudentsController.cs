@@ -13,12 +13,21 @@ public class StudentsController : Controller
     }
 
     // GET: STUDENTS
-    public async Task<IActionResult> Index(string sortOrder)    
+    public async Task<IActionResult> Index(string sortOrder, string searchString)    
     {
         ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
         ViewData["DateSortParam"] = sortOrder == "date_asc" ? "date_desc" : "date_asc";
+        ViewData["CurrentFilter"] = searchString;
 
         IQueryable<Student> students = from student in _context.Students select student;
+        if(!(String.IsNullOrEmpty(searchString) && String.IsNullOrWhiteSpace(searchString)))
+        {
+            students = students.Where(
+            student =>
+            student.LastName.Contains(searchString) ||
+            student.FirstName.Contains(searchString)
+            );
+        }
 
         switch (sortOrder)
         {
@@ -28,7 +37,6 @@ public class StudentsController : Controller
             default:          students = students.OrderBy(s => s.LastName); break;
         }
 
-        //ViewData["CurrentFilter"] = searchString;
 
         //var students = _context.Students.AsQueryable();
         //if (!string.IsNullOrEmpty(searchString))
