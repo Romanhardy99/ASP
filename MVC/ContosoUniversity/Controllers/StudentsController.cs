@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ContosoUniversity.Models;
+using ContosoUniversity;
 
 public class StudentsController : Controller
 {
@@ -13,15 +14,18 @@ public class StudentsController : Controller
     }
 
     // GET: STUDENTS
-    public async Task<IActionResult> Index(string sortOrder, string searchString)    
+    public async Task<IActionResult> Index(string sortOrder, string searchString, int? pageIndex)    
     {
         ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
         ViewData["DateSortParam"] = sortOrder == "date_asc" ? "date_desc" : "date_asc";
         ViewData["CurrentFilter"] = searchString;
 
+        //if (searchString != null) pageIndex = 1;
+
         IQueryable<Student> students = from student in _context.Students select student;
         if(!(String.IsNullOrEmpty(searchString) && String.IsNullOrWhiteSpace(searchString)))
         {
+            pageIndex = 1;
             students = students.Where(
             student =>
             student.LastName.Contains(searchString) ||
@@ -37,7 +41,8 @@ public class StudentsController : Controller
             default:          students = students.OrderBy(s => s.LastName); break;
         }
 
-
+        int pageSize = 3;
+        return View(await PaginatedList<Student>.CreateAsync(students.AsNoTracking(), pageIndex ?? 1, pageSize));
         //var students = _context.Students.AsQueryable();
         //if (!string.IsNullOrEmpty(searchString))
         //{
@@ -45,7 +50,7 @@ public class StudentsController : Controller
         //                                || s.FirstName.Contains(searchString));
         //}
         //return View(await students.OrderBy(s => s.LastName).ToListAsync());
-        return View(await students.ToListAsync());
+        //return View(await students.ToListAsync());
     }
 
     // GET: STUDENTS/Details/5

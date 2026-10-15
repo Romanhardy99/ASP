@@ -1,4 +1,5 @@
-@model IEnumerable<ContosoUniversity.Models.Student>
+@* @model IEnumerable<ContosoUniversity.Models.Student> *@
+@model PaginatedList<Student>
 
 @{
     ViewData["Title"] = "Студенты";
@@ -15,12 +16,12 @@
 <form asp-action="Index" method="get" class="gh-search">
     @* <input type="search" name="searchString" value="@ViewData["CurrentFilter"]"
            placeholder="Поиск по фамилии…" aria-label="Поиск по фамилии" /> *@
-           <label>
-               Поиск по имени:
-               <input type="search" name="SearchString" value="@ViewData["CurrentFilter"]"/>
-                <input type="submit" value="Поиск" class="gh-btn"/>
+    <label>
+        Поиск по имени:
+        <input type="search" name="SearchString" value="@ViewData["CurrentFilter"]" />
+        <input type="submit" value="Поиск" class="gh-btn" />
         <a asp-action="Index" class="gh-btn">Сбросить</a>
-            </label>
+    </label>
     @* <button type="submit" class="gh-btn">Найти</button> *@
 </form>
 
@@ -29,22 +30,23 @@
         <thead>
             <tr>
                 <th>
-                    <a  asp-action="Index" 
-                        asp-route-sortOrder="@ViewData["NameSortParam"]" 
-                        asp-route-searchString="@ViewData["CurrentFilter"]"
-                    >
-                        @Html.DisplayNameFor(model => model.LastName)
+                    <a asp-action="Index"
+                       asp-route-sortOrder="@ViewData["NameSortParam"]"
+                       asp-route-searchString="@ViewData["CurrentFilter"]">
+                        Last name
+                        @* @Html.DisplayNameFor(model => model.LastName) *@
                     </a>
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.FirstName)
+                    First name
+                    @* @Html.DisplayNameFor(model => model.FirstName) *@
                 </th>
                 <th>
-                    <a  asp-action="Index"  
-                        asp-route-sortOrder="@ViewData["DateSortParam"]"
-                        asp-route-searchString="@ViewData["CurrentFilter"]"
-                    >
-                        @Html.DisplayNameFor(model => model.EnrollmentDate)
+                    <a asp-action="Index"
+                       asp-route-sortOrder="@ViewData["DateSortParam"]"
+                       asp-route-searchString="@ViewData["CurrentFilter"]">
+                        Enrollment date
+                        @* @Html.DisplayNameFor(model => model.EnrollmentDate) *@
                     </a>
                 </th>
                 <th></th>
@@ -77,3 +79,25 @@
         </tbody>
     </table>
 </div>
+
+@{
+    string prevDisabled = Model.HasPreviousPage ? "" : "disabled";
+    string nextDisabled = Model.HasNextPage     ? "" : "disabled";
+}
+
+<a asp-action="Index"
+    @* asp-route-sortOrder="@ViewData["CurrentSort"]" *@
+    asp-route-pageIndex="@(Model.PageIndex - 1)"
+    asp-route-currentFilter="@ViewData["CurrentFilter"]"
+    class="btn btn-default @prevDisabled"
+    >
+    Prev
+</a>
+<a asp-action="Index"
+    @* asp-route-sortOrder="@ViewData["CurrentSort"]" *@
+    asp-route-pageIndex="@(Model.PageIndex + 1)"
+    asp-route-currentFilter="@ViewData["CurrentFilter"]"
+    class="btn btn-default @nextDisabled"
+    >
+    Next
+</a>
