@@ -41,7 +41,7 @@ public class StudentsController : Controller
             default:          students = students.OrderBy(s => s.LastName); break;
         }
 
-        int pageSize = 3;
+        int pageSize = 5;
         return View(await PaginatedList<Student>.CreateAsync(students.AsNoTracking(), pageIndex ?? 1, pageSize));
         //var students = _context.Students.AsQueryable();
         //if (!string.IsNullOrEmpty(searchString))
