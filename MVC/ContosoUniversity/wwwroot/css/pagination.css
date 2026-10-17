@@ -1,3 +1,23 @@
 ﻿.table-container {
     height:28vh;
 }
+.pagination-controls, .pagination-items, .pagination-items > div
+{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.pagonation-items, .pagination-items > div{
+    justify-content:center;
+}
+.pagination-items > div{
+    width:32px;
+    height:32px;
+    border:solid 1px;
+}
+.selected-page{
+    font-weight:800;
+    box-shadow:0px 0px 16px 0px gray;
+    background-color: #3286ce;
+}

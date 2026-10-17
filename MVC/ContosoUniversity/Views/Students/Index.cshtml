@@ -60,22 +60,22 @@
             <tbody>
                 @if (!Model.Any())
                 {
-                <tr>
-                    <td colspan="4" class="gh-empty">Студенты не найдены</td>
-                </tr>
+                    <tr>
+                        <td colspan="4" class="gh-empty">Студенты не найдены</td>
+                    </tr>
                 }
                 @foreach (var item in Model)
                 {
-                <tr>
-                    <td class="gh-strong">@item.LastName</td>
-                    <td>@item.FirstName</td>
-                    <td class="gh-mono">@item.EnrollmentDate.ToString("dd.MM.yyyy")</td>
-                    <td class="gh-actions">
-                        <a asp-action="Edit" asp-route-id="@item.ID">Изменить</a> ·
-                        <a asp-action="Details" asp-route-id="@item.ID">Подробнее</a> ·
-                        <a asp-action="Delete" asp-route-id="@item.ID" class="gh-danger">Удалить</a>
-                    </td>
-                </tr>
+                    <tr>
+                        <td class="gh-strong">@item.LastName</td>
+                        <td>@item.FirstName</td>
+                        <td class="gh-mono">@item.EnrollmentDate.ToString("dd.MM.yyyy")</td>
+                        <td class="gh-actions">
+                            <a asp-action="Edit" asp-route-id="@item.ID">Изменить</a> ·
+                            <a asp-action="Details" asp-route-id="@item.ID">Подробнее</a> ·
+                            <a asp-action="Delete" asp-route-id="@item.ID" class="gh-danger">Удалить</a>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
@@ -84,22 +84,31 @@
 
 @{
     string prevDisabled = Model.HasPreviousPage ? "" : "disabled";
-    string nextDisabled = Model.HasNextPage     ? "" : "disabled";
+    string nextDisabled = Model.HasNextPage ? "" : "disabled";
 }
 
-<a asp-action="Index"
-    @* asp-route-sortOrder="@ViewData["CurrentSort"]" *@
-    asp-route-pageIndex="@(Model.PageIndex - 1)"
-    asp-route-searchString="@ViewData["CurrentFilter"]"
-    class="btn btn-default @prevDisabled"
-    >
-    Prev
-</a>
-<a asp-action="Index"
-    @* asp-route-sortOrder="@ViewData["CurrentSort"]" *@
-    asp-route-pageIndex="@(Model.PageIndex + 1)"
-    asp-route-searchString="@ViewData["CurrentFilter"]"
-    class="btn btn-default @nextDisabled"
-    >
-    Next
-</a>
+<div class="pagination-controls">
+    <a asp-action="Index"
+        @* asp-route-sortOrder="@ViewData["CurrentSort"]" *@
+       asp-route-pageIndex="@(Model.PageIndex - 1)"
+       asp-route-searchString="@ViewData["CurrentFilter"]"
+       class="btn btn-default @prevDisabled">
+        Prev
+    </a>
+
+    <div class="pagination-items">
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <div class=@(i == Model.PageIndex ? "selected-page" : "pagination-item")>
+                @i
+            </div>
+        }
+    </div>
+    <a asp-action="Index"
+        @* asp-route-sortOrder="@ViewData["CurrentSort"]" *@
+       asp-route-pageIndex="@(Model.PageIndex + 1)"
+       asp-route-searchString="@ViewData["CurrentFilter"]"
+       class="btn btn-default @nextDisabled">
+        Next
+    </a>
+</div>
