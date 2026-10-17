@@ -25,46 +25,47 @@
     @* <button type="submit" class="gh-btn">Найти</button> *@
 </form>
 
-<div class="gh-table-box">
-    <table class="gh-table">
-        <thead>
-            <tr>
-                <th>
-                    <a asp-action="Index"
-                       asp-route-sortOrder="@ViewData["NameSortParam"]"
-                       asp-route-searchString="@ViewData["CurrentFilter"]">
-                        Last name
-                        @* @Html.DisplayNameFor(model => model.LastName) *@
-                    </a>
-                </th>
-                <th>
-                    First name
-                    @* @Html.DisplayNameFor(model => model.FirstName) *@
-                </th>
-                <th>
-                    <a asp-action="Index"
-                       asp-route-sortOrder="@ViewData["DateSortParam"]"
-                       asp-route-searchString="@ViewData["CurrentFilter"]">
-                        Enrollment date
-                        @* @Html.DisplayNameFor(model => model.EnrollmentDate) *@
-                    </a>
-                </th>
-                <th></th>
-                @* <th>Фамилия</th>
-                <th>Имя</th>
-                <th>Дата зачисления</th>
-                <th></th> *@
-            </tr>
-        </thead>
-        <tbody>
-            @if (!Model.Any())
-            {
+<div class="table-container">
+    <div class="gh-table-box">
+        <table class="gh-table">
+            <thead>
+                <tr>
+                    <th>
+                        <a asp-action="Index"
+                           asp-route-sortOrder="@ViewData["NameSortParam"]"
+                           asp-route-searchString="@ViewData["CurrentFilter"]">
+                            Last name
+                            @* @Html.DisplayNameFor(model => model.LastName) *@
+                        </a>
+                    </th>
+                    <th>
+                        First name
+                        @* @Html.DisplayNameFor(model => model.FirstName) *@
+                    </th>
+                    <th>
+                        <a asp-action="Index"
+                           asp-route-sortOrder="@ViewData["DateSortParam"]"
+                           asp-route-searchString="@ViewData["CurrentFilter"]">
+                            Enrollment date
+                            @* @Html.DisplayNameFor(model => model.EnrollmentDate) *@
+                        </a>
+                    </th>
+                    <th></th>
+                    @* <th>Фамилия</th>
+                    <th>Имя</th>
+                    <th>Дата зачисления</th>
+                    <th></th> *@
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Any())
+                {
                 <tr>
                     <td colspan="4" class="gh-empty">Студенты не найдены</td>
                 </tr>
-            }
-            @foreach (var item in Model)
-            {
+                }
+                @foreach (var item in Model)
+                {
                 <tr>
                     <td class="gh-strong">@item.LastName</td>
                     <td>@item.FirstName</td>
@@ -75,9 +76,10 @@
                         <a asp-action="Delete" asp-route-id="@item.ID" class="gh-danger">Удалить</a>
                     </td>
                 </tr>
-            }
-        </tbody>
-    </table>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
 @{
@@ -88,7 +90,7 @@
 <a asp-action="Index"
     @* asp-route-sortOrder="@ViewData["CurrentSort"]" *@
     asp-route-pageIndex="@(Model.PageIndex - 1)"
-    asp-route-currentFilter="@ViewData["CurrentFilter"]"
+    asp-route-searchString="@ViewData["CurrentFilter"]"
     class="btn btn-default @prevDisabled"
     >
     Prev
@@ -96,7 +98,7 @@
 <a asp-action="Index"
     @* asp-route-sortOrder="@ViewData["CurrentSort"]" *@
     asp-route-pageIndex="@(Model.PageIndex + 1)"
-    asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   asp-route-searchString="@ViewData["CurrentFilter"]"
     class="btn btn-default @nextDisabled"
     >
     Next
