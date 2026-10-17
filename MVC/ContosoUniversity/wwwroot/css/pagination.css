@@ -13,17 +13,19 @@
     }
 
     .pagination-items > a {
-        text-decoration:none;
+        text-decoration: none;
         width: 32px;
         height: 32px;
         border: solid 1px;
-        color:black;
-        margin:8px;
+        color: white;
+        background-color: #18b20c;
+        margin: 8px;
     }
 
 .selected-page {
-    color:white;
+    color:black;
     font-weight: 800;
-    box-shadow: 0px 0px 2px 0px green;
+    box-shadow: 0px 0px 2px 0px black;
     background-color: #18b20c;
+    border: solid 2px;
 }

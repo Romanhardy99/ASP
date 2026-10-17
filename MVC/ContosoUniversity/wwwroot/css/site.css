@@ -146,6 +146,7 @@ a:hover {
     font: inherit;
     font-weight: 500;
     cursor: pointer;
+    justify-content:right;
 }
 
 .gh-btn:hover {
