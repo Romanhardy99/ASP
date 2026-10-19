@@ -1,47 +1,54 @@
 @model IEnumerable<ContosoUniversity.Models.Course>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Курсы";
 }
 
-<h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Credits)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Enrollments)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(model => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Credits)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Enrollments)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CourseID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CourseID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CourseID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="gh-page-header">
+    <div class="gh-title">
+        <h1>Курсы</h1>
+        <span class="gh-counter">@Model.Count()</span>
+    </div>
+    <a asp-action="Create" class="gh-btn gh-btn-primary">Добавить курс</a>
+</div>
+
+
+<div class="table-container">
+    <div class="gh-table-box">
+        <table class="gh-table">
+            <thead>
+                <tr>
+                    <th>Номер</th>
+                    <th>Название</th>
+                    <th>Кредиты </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="4" class="gh-empty">Курсы не найдены</td>
+                    </tr>
+                }
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td class="gh-mono">@item.CourseID</td>
+                        <td class="gh-strong">@item.Title</td>
+                        <td>@item.Credits</td>
+                        <td class="gh-actions">
+                            <a asp-action="Edit" asp-route-id="@item.CourseID">Изменить</a> ·
+                            <a asp-action="Details" asp-route-id="@item.CourseID">Подробнее</a> ·
+                            <a asp-action="Delete" asp-route-id="@item.CourseID" class="gh-danger">Удалить</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<partial name="_Pagination" model="Model" />

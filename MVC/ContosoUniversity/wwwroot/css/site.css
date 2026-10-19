@@ -252,3 +252,24 @@ a:hover {
     color: var(--gh-muted);
     padding: 32px 16px;
 }
+.gh-select {
+    padding: 6px 10px;
+    border: 1px solid var(--gh-border);
+    border-radius: 6px;
+    background: var(--gh-bg-subtle);
+    font: inherit;
+    color: var(--gh-text);
+    cursor: pointer;
+}
+.gh-per-page {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gh-muted);
+}
+    .gh-select:focus {
+        outline: none;
+        border-color: var(--gh-link);
+        box-shadow: 0 0 0 3px rgba(9, 105, 218, .2);
+    }
+

@@ -2,7 +2,14 @@
 
 namespace ContosoUniversity
 {
-    public class PaginatedList<T>:List<T>
+    public interface IPagination
+    {
+        int PageIndex { get; }
+        int TotalPages { get; }
+        bool HasPreviousPage { get; }
+        bool HasNextPage { get; }
+    }
+    public class PaginatedList<T>:List<T>, IPagination
     {
         public int PageIndex { get; set; }
         public int TotalPages { get; set; }

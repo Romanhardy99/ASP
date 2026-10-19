@@ -14,34 +14,49 @@ public class StudentsController : Controller
     }
 
     // GET: STUDENTS
-    public async Task<IActionResult> Index(string sortOrder, string searchString, int? pageIndex)    
+    public async Task<IActionResult> Index(
+        string sortOrder, 
+        string currentFilter, 
+        string searchString, 
+        int? pageIndex,
+        int? itemsPerPage)    
     {
+        int pageSize = itemsPerPage is 3 or 5 or 10 ? itemsPerPage.Value : 5;
+        ViewData["ItemsPerPage"] = pageSize;
+        ViewData["CurrentFilter"] = searchString;
         ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
         ViewData["DateSortParam"] = sortOrder == "date_asc" ? "date_desc" : "date_asc";
-        ViewData["CurrentFilter"] = searchString;
 
         //if (searchString != null) pageIndex = 1;
 
-        IQueryable<Student> students = from student in _context.Students select student;
-        if(!(String.IsNullOrEmpty(searchString) && String.IsNullOrWhiteSpace(searchString)))
+        if (searchString != null)
         {
             pageIndex = 1;
-            students = students.Where(
-            student =>
-            student.LastName.Contains(searchString) ||
-            student.FirstName.Contains(searchString)
-            );
         }
-
-        switch (sortOrder)
+        else
         {
-            case "name_desc": students = students.OrderByDescending(s => s.LastName); break;
-            case "date_desc": students = students.OrderByDescending(s => s.EnrollmentDate); break;
-            case "date_asc":  students = students.OrderBy(s => s.EnrollmentDate); break;
-            default:          students = students.OrderBy(s => s.LastName); break;
+            searchString = currentFilter;
         }
 
-        int pageSize = 5;
+        ViewData["CurrentFilter"] = searchString;
+
+        IQueryable<Student> students = _context.Students;
+        
+        if(!string.IsNullOrWhiteSpace(searchString))
+        {
+            students = students.Where(student =>
+            student.LastName.Contains(searchString) ||
+            student.FirstName.Contains(searchString));
+        }
+
+        students = sortOrder switch
+        {
+            "name_desc" => students = students.OrderByDescending(s => s.LastName),
+            "date_desc" => students = students.OrderByDescending(s => s.EnrollmentDate),
+            "date_asc" => students = students.OrderBy(s => s.EnrollmentDate),
+            _ => students = students.OrderBy(s => s.LastName)
+        };
+
         return View(await PaginatedList<Student>.CreateAsync(students.AsNoTracking(), pageIndex ?? 1, pageSize));
         //var students = _context.Students.AsQueryable();
         //if (!string.IsNullOrEmpty(searchString))
@@ -114,7 +129,7 @@ public class StudentsController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? id, [Bind("LastName,FirstName,EnrollmentDate")] Student student)
+    public async Task<IActionResult> Edit(int? id, [Bind("ID,LastName,FirstName,EnrollmentDate")] Student student)
     {
         if (id != student.ID)
         {
