@@ -1,0 +1,84 @@
+@model Academy.Models.Discipline
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Discipline</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="DisciplineId" />
+            <div class="form-group">
+                <label asp-for="DisciplineName" class="control-label"></label>
+                <input asp-for="DisciplineName" class="form-control" />
+                <span asp-validation-for="DisciplineName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumberOfLessons" class="control-label"></label>
+                <input asp-for="NumberOfLessons" class="form-control" />
+                <span asp-validation-for="NumberOfLessons" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Exams" class="control-label"></label>
+                <input asp-for="Exams" class="form-control" />
+                <span asp-validation-for="Exams" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Schedules" class="control-label"></label>
+                <input asp-for="Schedules" class="form-control" />
+                <span asp-validation-for="Schedules" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DependentDiscipline1s" class="control-label"></label>
+                <input asp-for="DependentDiscipline1s" class="form-control" />
+                <span asp-validation-for="DependentDiscipline1s" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Directions" class="control-label"></label>
+                <input asp-for="Directions" class="form-control" />
+                <span asp-validation-for="Directions" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Disciplines" class="control-label"></label>
+                <input asp-for="Disciplines" class="form-control" />
+                <span asp-validation-for="Disciplines" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DisciplinesNavigation" class="control-label"></label>
+                <input asp-for="DisciplinesNavigation" class="form-control" />
+                <span asp-validation-for="DisciplinesNavigation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Groups" class="control-label"></label>
+                <input asp-for="Groups" class="form-control" />
+                <span asp-validation-for="Groups" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RequiredDiscipline1s" class="control-label"></label>
+                <input asp-for="RequiredDiscipline1s" class="form-control" />
+                <span asp-validation-for="RequiredDiscipline1s" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Teachers" class="control-label"></label>
+                <input asp-for="Teachers" class="form-control" />
+                <span asp-validation-for="Teachers" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

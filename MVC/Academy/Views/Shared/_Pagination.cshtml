@@ -1,0 +1,48 @@
+﻿@model IPagination
+
+<nav class="gh-pagination" aria-label="Страницы">
+    @if (Model.HasPreviousPage)
+    {
+        <a asp-action="Index"
+           asp-route-pageIndex="@(Model.PageIndex - 1)"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+           asp-route-itemsPerPage="@ViewData["ItemsPerPage"]"
+           class="gh-page edge">Назад</a>
+    }
+    else
+    {
+        <span class="gh-page edge disabled">Назад</span>
+    }
+
+    @for (int i = 1; i <= Model.TotalPages; i++)
+    {
+        if (i == Model.PageIndex)
+        {
+            <span class="gh-page current" aria-current="page">@i</span>
+        }
+        else
+        {
+            <a asp-action="Index"
+               asp-route-pageIndex="@i"
+               asp-route-sortOrder="@ViewData["CurrentSort"]"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               asp-route-itemsPerPage="@ViewData["ItemsPerPage"]"
+               class="gh-page">@i</a>
+        }
+    }
+
+    @if (Model.HasNextPage)
+    {
+        <a asp-action="Index"
+           asp-route-pageIndex="@(Model.PageIndex + 1)"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+           asp-route-itemsPerPage="@ViewData["ItemsPerPage"]"
+           class="gh-page edge">Вперёд</a>
+    }
+    else
+    {
+        <span class="gh-page edge disabled">Вперёд</span>
+    }
+</nav>

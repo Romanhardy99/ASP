@@ -1,0 +1,57 @@
+@{
+    // Текущий контроллер — чтобы подсветить активный пункт меню
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+    var action = ViewContext.RouteData.Values["action"]?.ToString();
+    string Active(string name, string? act = null) =>
+        controller == name && (act == null || action == act) ? "gh-nav-link active" : "gh-nav-link";
+}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] — Академия</title>
+    <script type="importmap"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pagination.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Academy.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="gh-header">
+        <a class="gh-brand" asp-controller="Home" asp-action="Index">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M2 9l10-5 10 5-10 5z"></path>
+                <path d="M6 11v5c3 2 9 2 12 0v-5"></path>
+            </svg>
+            Академия
+        </a>
+        <nav class="gh-nav">
+            <a class="@Active("Home", "Index")" asp-controller="Home" asp-action="Index">Главная</a>
+            <a class="@Active("Directions")" asp-controller="Directions" asp-action="Index">Направления</a>
+            <a class="@Active("Groups")" asp-controller="Groups" asp-action="Index">Группы</a>
+            <a class="@Active("Students")" asp-controller="Students" asp-action="Index">Студенты</a>
+            <a class="@Active("Teachers")" asp-controller="Teachers" asp-action="Index">Преподаватели</a>
+            <a class="@Active("Disciplines")" asp-controller="Disciplines" asp-action="Index">Дисциплины</a>
+        </nav>
+    </header>
+
+    <main class="gh-main">
+        @RenderBody()
+    </main>
+
+    <footer class="gh-footer">
+        &copy; @DateTime.Now.Year Академия
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

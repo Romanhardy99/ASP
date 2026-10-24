@@ -1,0 +1,95 @@
+@model IEnumerable<Academy.Models.Discipline>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DisciplineName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumberOfLessons)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Exams)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Schedules)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DependentDiscipline1s)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Directions)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Disciplines)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DisciplinesNavigation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Groups)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RequiredDiscipline1s)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Teachers)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(model => item.DisciplineName)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.NumberOfLessons)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Exams)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Schedules)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.DependentDiscipline1s)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Directions)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Disciplines)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.DisciplinesNavigation)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Groups)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.RequiredDiscipline1s)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Teachers)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.DisciplineId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.DisciplineId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.DisciplineId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

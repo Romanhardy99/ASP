@@ -1,0 +1,150 @@
+
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Academy.Models;
+using Academy.Data;
+
+public class TeachersController : Controller
+{
+    private readonly AcademyContext _context;
+
+    public TeachersController(AcademyContext context)
+    {
+        _context = context;
+    }
+
+    // GET: TEACHERS
+    public async Task<IActionResult> Index()    
+    {
+        return View(await _context.Teachers.ToListAsync());
+    }
+
+    // GET: TEACHERS/Details/5
+    public async Task<IActionResult> Details(short? teacherid)
+    {
+        if (teacherid == null)
+        {
+            return NotFound();
+        }
+
+        var teacher = await _context.Teachers
+            .FirstOrDefaultAsync(m => m.TeacherId == teacherid);
+        if (teacher == null)
+        {
+            return NotFound();
+        }
+
+        return View(teacher);
+    }
+
+    // GET: TEACHERS/Create
+    public IActionResult Create()
+    {
+        return View();
+    }
+
+    // POST: TEACHERS/Create
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create([Bind("TeacherId,LastName,FirstName,MiddleName,BirthDate,Email,Phone,Photo,WorkSince,Rate,Schedules,Disciplines")] Teacher teacher)
+    {
+        if (ModelState.IsValid)
+        {
+            _context.Add(teacher);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+        return View(teacher);
+    }
+
+    // GET: TEACHERS/Edit/5
+    public async Task<IActionResult> Edit(short? teacherid)
+    {
+        if (teacherid == null)
+        {
+            return NotFound();
+        }
+
+        var teacher = await _context.Teachers.FindAsync(teacherid);
+        if (teacher == null)
+        {
+            return NotFound();
+        }
+        return View(teacher);
+    }
+
+    // POST: TEACHERS/Edit/5
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(short? teacherid, [Bind("TeacherId,LastName,FirstName,MiddleName,BirthDate,Email,Phone,Photo,WorkSince,Rate,Schedules,Disciplines")] Teacher teacher)
+    {
+        if (teacherid != teacher.TeacherId)
+        {
+            return NotFound();
+        }
+
+        if (ModelState.IsValid)
+        {
+            try
+            {
+                _context.Update(teacher);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TeacherExists(teacher.TeacherId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
+        }
+        return View(teacher);
+    }
+
+    // GET: TEACHERS/Delete/5
+    public async Task<IActionResult> Delete(short? teacherid)
+    {
+        if (teacherid == null)
+        {
+            return NotFound();
+        }
+
+        var teacher = await _context.Teachers
+            .FirstOrDefaultAsync(m => m.TeacherId == teacherid);
+        if (teacher == null)
+        {
+            return NotFound();
+        }
+
+        return View(teacher);
+    }
+
+    // POST: TEACHERS/Delete/5
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(short? teacherid)
+    {
+        var teacher = await _context.Teachers.FindAsync(teacherid);
+        if (teacher != null)
+        {
+            _context.Teachers.Remove(teacher);
+        }
+
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
+    }
+
+    private bool TeacherExists(short? teacherid)
+    {
+        return _context.Teachers.Any(e => e.TeacherId == teacherid);
+    }
+}

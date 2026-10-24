@@ -1,0 +1,51 @@
+﻿.table-container {
+    /* заголовок + N строк, примерно по 41px каждая */
+    min-height: calc((var(--rows, 5) + 1) * 41px + 2px);
+}
+
+.gh-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 16px;
+}
+
+.gh-page {
+    min-width: 32px;
+    height: 32px;
+    padding: 0 10px;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    color: var(--gh-text);
+    line-height: 1;
+}
+
+    .gh-page:hover {
+        border-color: var(--gh-border);
+        color: var(--gh-text);
+        text-decoration: none;
+    }
+
+    .gh-page.current {
+        background: var(--gh-link);
+        border-color: var(--gh-link);
+        color: #ffffff;
+        font-weight: 500;
+    }
+
+    .gh-page.edge {
+        color: var(--gh-link);
+    }
+
+    .gh-page.disabled {
+        color: var(--gh-muted);
+        opacity: .5;
+        pointer-events: none;
+    }
+

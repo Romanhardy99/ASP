@@ -1,0 +1,89 @@
+@model PaginatedList<Student>
+
+@{
+    ViewData["Title"] = "Студенты";
+    int size = (int)ViewData["ItemsPerPage"]!;
+}
+
+<div class="gh-page-header">
+    <div class="gh-title">
+        <h1>Студенты</h1>
+        <span class="gh-counter">@Model.Count()</span>
+    </div>
+    <a asp-action="Create" class="gh-btn gh-btn-primary">Добавить студента</a>
+</div>
+
+<form asp-action="Index" method="get" class="gh-search">
+    <input type="hidden" name="sortOrder" value="@ViewData["CurrentSort"]" />
+
+    <input type="search" name="searchString" value="@ViewData["CurrentFilter"]"
+           placeholder="Поиск по ФИО или группе…"
+           aria-label="Поиск по ФИО или группе" />
+
+    <button type="submit" class="gh-btn">Найти</button>
+    <a asp-action="Index" asp-route-itemsPerPage="@size" class="gh-btn">Сбросить</a>
+
+    <label class="gh-per-page">
+        Строк:
+        <select name="itemsPerPage" class="gh-select" onchange="this.form.submit()">
+            <option value="3" selected="@(size == 3)">3</option>
+            <option value="5" selected="@(size == 5)">5</option>
+            <option value="10" selected="@(size == 10)">10</option>
+        </select>
+    </label>
+</form>
+
+<div class="table-container" style="--rows: @size">
+    <div class="gh-table-box">
+        <table class="gh-table">
+            <thead>
+                <tr>
+                    <th>
+                        <a asp-action="Index"
+                           asp-route-sortOrder="@ViewData["NameSortParam"]"
+                           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                           asp-route-itemsPerPage="@size">ФИО</a>
+                    </th>
+                    <th>
+                        <a asp-action="Index"
+                           asp-route-sortOrder="@ViewData["GroupSortParam"]"
+                           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                           asp-route-itemsPerPage="@size">Группа</a>
+                    </th>
+                    <th>
+                        <a asp-action="Index"
+                           asp-route-sortOrder="@ViewData["BirthSortParam"]"
+                           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                           asp-route-itemsPerPage="@size">Дата рождения</a>
+                    </th>
+                    <th>E-mail</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="5" class="gh-empty">Студенты не найдены</td>
+                    </tr>
+                }
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="gh-strong">@item.LastName @item.FirstName @item.MiddleName</td>
+                        <td>@(item.GroupNavigation?.GroupName ?? "—")</td>
+                        <td class="gh-mono">@item.BirthDate.ToString("dd.MM.yyyy")</td>
+                        <td>@item.Email</td>
+                        <td class="gh-actions">
+                            <a asp-action="Edit" asp-route-id="@item.StudId">Изменить</a> ·
+                            <a asp-action="Details" asp-route-id="@item.StudId">Подробнее</a> ·
+                            <a asp-action="Delete" asp-route-id="@item.StudId" class="gh-danger">Удалить</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<partial name="_Pagination" model="Model" />
