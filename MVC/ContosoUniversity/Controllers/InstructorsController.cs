@@ -1,6 +1,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ContosoUniversity.Models.ViewModels;
 using ContosoUniversity.Models;
 
 public class InstructorsController : Controller
@@ -38,12 +39,16 @@ public class InstructorsController : Controller
         if(id != null)
         {
             ViewData["InstructorID"] = id.Value;
-            Instructor instructor = viewModel
-                .Instructors
-                .Where(i => i.ID == id.Value).Single();
-            viewModel.Courses = instructor
-                .CourseAssignments
-                .Select(ca => ca.Course);
+            //Instructor instructor = viewModel
+            //    .Instructors
+            //    .Where(i => i.ID == id.Value).Single();
+            //viewModel.Courses = instructor
+            //    .CourseAssignments
+            //    .Select(ca => ca.Course);
+
+            viewModel.Courses = viewModel
+                .Instructors.Where(i => i.ID == id.Value).Single()
+                .CourseAssignments.Select(ca => ca.Course);
         }
 
         if(courseID != null)
