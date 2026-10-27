@@ -48,7 +48,7 @@
 			string selectedRow = "";
 			if (item.ID == (int?)ViewData["InstructorID"]) selectedRow = "table-success";
 
-			<tr>
+			<tr class="@selectedRow">
 				<td>
 					@Html.DisplayFor(model => item.LastName)
 				</td>
