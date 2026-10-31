@@ -27,8 +27,8 @@ namespace ContosoUniversity.Models
         {
             get => $"{LastName} {FirstName}";
         }
-        public OfficeAssignment OfficeAssignment { get; set; }
-        public ICollection<CourseAssignment> CourseAssignments { get; set; }
+        public OfficeAssignment? OfficeAssignment { get; set; }
+        public ICollection<CourseAssignment>? CourseAssignments { get; set; }
 
     }
 }

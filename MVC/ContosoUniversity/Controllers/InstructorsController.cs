@@ -84,6 +84,9 @@ public class InstructorsController : Controller
     // GET: INSTRUCTORS/Create
     public IActionResult Create()
     {
+        Instructor instructor = new Instructor();
+        instructor.CourseAssignments = new List<CourseAssignment>();
+        PopulateAssignedCourseData(instructor);
         return View();
     }
 
@@ -92,14 +95,16 @@ public class InstructorsController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("ID,LastName,FirstName,HireDate,FullName,OfficeAssignment,CourseAssignments")] Instructor instructor)
+    public async Task<IActionResult> Create([Bind("ID,LastName,FirstName,HireDate")] Instructor instructor, string[] selectedCourses)
     {
+        if(selectedCourses != null)UpdateInstructorCourses(selectedCourses, instructor);
         if (ModelState.IsValid)
         {
             _context.Add(instructor);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        PopulateAssignedCourseData(instructor);
         return View(instructor);
     }
 
@@ -130,7 +135,7 @@ public class InstructorsController : Controller
     public async Task<IActionResult> Edit
         (
             int? id,
-            [Bind("ID,LastName,FirstName,HireDate,FullName,OfficeAssignment,CourseAssignments")] Instructor instructor,
+            [Bind("ID,LastName,FirstName,HireDate")] Instructor instructor,
             string[] selectedCourses
         )
     {
@@ -139,7 +144,7 @@ public class InstructorsController : Controller
         instructor = await _context.Instructors
             .Include(i => i.OfficeAssignment)
             .Include(i => i.CourseAssignments)
-            .ThenInclude(ca => ca.Course)
+                .ThenInclude(ca => ca.Course)
             .FirstOrDefaultAsync(i => i.ID == id);
 
         bool ok = await TryUpdateModelAsync<Instructor>
@@ -191,12 +196,26 @@ public class InstructorsController : Controller
         //    instructor.CourseAssignments = null;
         //    return;
         //}
+        List<CourseAssignment> courseAssignments = new List<CourseAssignment>();
+        foreach (string selectedCourse in selectedCourses)
+        {
+            courseAssignments.Add
+                (
+                    new CourseAssignment 
+                    { 
+                        InstructorID = instructor.ID, 
+                        CourseID = Convert.ToInt32(selectedCourse) 
+                    }
+                );
+        }
+        instructor.CourseAssignments = courseAssignments;
+        /*
         HashSet<string> selectedCoursesHS = new HashSet<string>(selectedCourses);
         HashSet<int> instructorCourses = new HashSet<int>
             (
                 instructor.CourseAssignments.Select(ca => ca.CourseID)
-            );
-        foreach (Course course in _context.Courses)
+            );*/
+        /*foreach (Course course in _context.Courses)
         {
             if (selectedCoursesHS.Contains(course.CourseID.ToString()))
             {
@@ -219,7 +238,7 @@ public class InstructorsController : Controller
                     .FirstOrDefault(ca => ca.CourseID == course.CourseID);
                 _context.Remove(courseToRemove);
             }
-        }
+        }*/
     }
 
     /*public async Task<IActionResult> Edit(int? id, [Bind("ID,LastName,FirstName,HireDate,FullName,OfficeAssignment,CourseAssignments")] Instructor instructor)
